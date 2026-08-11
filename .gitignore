@@ -10,7 +10,6 @@
 
 # pnpm
 .pnpm-store/
-pnpm-lock.yaml
 
 # testing
 /coverage
