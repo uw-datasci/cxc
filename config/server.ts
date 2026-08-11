@@ -18,6 +18,10 @@ function requireEnv(name: string): string {
 }
 
 export const serverConfig = {
-  // databaseUrl: requireEnv("DATABASE_URL"),
-  // apiSecret: requireEnv("API_SECRET"),
+  adminDatabaseUrl: requireEnv("ADMIN_DATABASE_URL"),
+  databaseUrl: requireEnv("DATABASE_URL"),
+  r2AccessKeyId: requireEnv("R2_ACCESS_KEY_ID"),
+  r2AccountId: requireEnv("R2_ACCOUNT_ID"),
+  r2BucketName: requireEnv("R2_BUCKET_NAME"),
+  r2SecretAccessKey: requireEnv("R2_SECRET_ACCESS_KEY"),
 } as const;
