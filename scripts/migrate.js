@@ -41,9 +41,14 @@ if (!isProduction && !isCI) {
   console.log(`✓ Running in ${isProduction ? "production" : "CI"} mode`);
 }
 
-if (!process.env.DATABASE_URL) {
-  console.error("❌ ERROR: DATABASE_URL environment variable is not set");
-  console.error("\nFor local development, add DATABASE_URL to .env.local (see .env.example)\n");
+// Migrations run as app_admin, not app_public: they create tables, alter role
+// attributes, and manage grants. app_public is deliberately restricted to DML
+// (see migrations/sqls/*-role-hardening-up.sql) and cannot perform any of it.
+if (!process.env.ADMIN_DATABASE_URL) {
+  console.error("❌ ERROR: ADMIN_DATABASE_URL environment variable is not set");
+  console.error(
+    "\nFor local development, add ADMIN_DATABASE_URL to .env.local (see .env.example)\n"
+  );
   process.exit(1);
 }
 

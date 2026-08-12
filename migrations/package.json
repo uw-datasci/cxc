@@ -1,0 +1,4 @@
+{
+  "//": "The root package.json sets \"type\": \"module\", but db-migrate generates CommonJS shims (require/exports/__dirname) and discovers migrations with /\\.js$/ — so they cannot be renamed to .cjs. This nested manifest scopes just this directory back to CommonJS.",
+  "type": "commonjs"
+}

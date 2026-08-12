@@ -1,17 +1,17 @@
 {
   "dev": {
     "driver": "pg",
-    "ENV": "DATABASE_URL",
+    "ENV": "ADMIN_DATABASE_URL",
     "multipleStatements": true
   },
   "test": {
     "driver": "pg",
-    "ENV": "DATABASE_URL",
+    "ENV": "ADMIN_DATABASE_URL",
     "multipleStatements": true
   },
   "prod": {
     "driver": "pg",
-    "ENV": "DATABASE_URL",
+    "ENV": "ADMIN_DATABASE_URL",
     "multipleStatements": true
   },
   "sql-file": true

@@ -20,6 +20,8 @@ function requireEnv(name: string): string {
 export const serverConfig = {
   adminDatabaseUrl: requireEnv("ADMIN_DATABASE_URL"),
   databaseUrl: requireEnv("DATABASE_URL"),
+  neonAuthBaseUrl: requireEnv("NEON_AUTH_BASE_URL"),
+  neonAuthCookieSecret: requireEnv("NEON_AUTH_COOKIE_SECRET"),
   r2AccessKeyId: requireEnv("R2_ACCESS_KEY_ID"),
   r2AccountId: requireEnv("R2_ACCOUNT_ID"),
   r2BucketName: requireEnv("R2_BUCKET_NAME"),

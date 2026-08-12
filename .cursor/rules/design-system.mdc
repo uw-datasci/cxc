@@ -55,10 +55,12 @@ src/
 ├── providers/             # React providers (theme, auth, etc.)
 ├── types/                 # TypeScript type definitions
 │
-└── server/                # Server-side code (Next.js server components/actions)
-    ├── config/           # Server configuration
-    ├── repositories/     # Data access layer
-    └── services/         # Business logic services
+└── server/                # Server-side code, organized by DOMAIN not by layer
+    ├── README.md         # Full spec — read before adding server code
+    ├── shared/           # Infrastructure the domains extend (base.repository.ts)
+    └── users/            # One folder per domain
+        ├── users.service.ts      # Business logic; what the app imports
+        └── users.repository.ts   # Data access; internal to the domain
 ```
 
 ### File Naming Conventions
@@ -66,8 +68,9 @@ src/
 - **Components**: PascalCase (e.g., `Button.tsx`, `AnimatedBox.tsx`)
 - **Hooks**: camelCase with `use` prefix (e.g., `useAuth.ts`, `useTheme.ts`)
 - **Utilities**: camelCase (e.g., `utils.ts`, `apiClient.ts`)
-- **Types**: PascalCase (e.g., `User.ts`, `ApiResponse.ts`)
-- **Server files**: camelCase (e.g., `userService.ts`, `authRepository.ts`)
+- **Types**: lowercase, by domain/resource (e.g., `user.ts`, `auth.ts`) — see `types/.gitkeep`.
+  The exported types inside remain PascalCase (`interface AuthContext`).
+- **Server files**: `{domain}.service.ts` / `{domain}.repository.ts` (e.g., `users/users.service.ts`)
 
 ### Path Aliases
 
@@ -97,11 +100,18 @@ Always use path aliases instead of relative imports when importing from these di
    - Examples: `AnimatedBox`, `UserProfile`, `Dashboard`, etc.
    - Can import from `@/components/ui`
 
-3. **Server Code** (`src/server/`):
+3. **Server Code** (`server/`):
 
    - Server-side logic, data fetching, business logic
    - Use for Next.js Server Components, Server Actions, API route handlers
-   - Separate concerns: config, repositories (data access), services (business logic)
+   - Organize by **domain**, not by layer: `server/{domain}/{domain}.service.ts` and
+     `server/{domain}/{domain}.repository.ts`. Do not create top-level `repositories/`
+     or `services/` trees.
+   - The app layer imports **services only** — repositories are internal to their domain
+     and an ESLint rule enforces it
+   - Repositories extend `BaseRepository` (`server/shared/base.repository.ts`), which binds
+     the query to one user so RLS applies. Never query `@/config/db` directly.
+   - See `server/README.md` for the full spec
 
 4. **Hooks** (`src/hooks/`):
 
