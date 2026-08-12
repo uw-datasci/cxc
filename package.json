@@ -11,7 +11,12 @@
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
     "ui:add": "node scripts/ui-add.js",
-    "pull-secrets": "node scripts/pull-secrets.js"
+    "pull-secrets": "node scripts/pull-secrets.js",
+    "migrate": "node scripts/migrate.js",
+    "migrate:down": "node scripts/migrate.js down",
+    "migrate:reset": "node scripts/migrate.js reset",
+    "migrate:check": "node scripts/migrate.js check",
+    "migrate:create": "node scripts/migrate.js create"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -35,6 +40,8 @@
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "db-migrate": "^0.11.14",
+    "db-migrate-pg": "^1.5.2",
     "eslint": "^9.39.4",
     "eslint-config-next": "16.1.7",
     "postcss": "^8",
