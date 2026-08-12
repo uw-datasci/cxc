@@ -72,10 +72,12 @@ src/
 ├── contexts/              # React Context providers
 ├── providers/             # App-level providers
 ├── types/                 # TypeScript type definitions
-└── server/                # Server-side code
-    ├── config/           # Configuration
-    ├── repositories/     # Data access layer
-    └── services/         # Business logic
+└── server/                # Server-side code, organized by DOMAIN not by layer
+    ├── README.md         # Full spec — read before adding server code
+    ├── shared/           # Infrastructure the domains extend (base.repository.ts)
+    └── users/            # One folder per domain
+        ├── users.service.ts      # Business logic; what the app imports
+        └── users.repository.ts   # Data access; internal to the domain
 ```
 
 ### File Placement Rules
@@ -100,13 +102,18 @@ src/
   - Feature-specific functionality
   - Can be page-specific or reusable within a feature
 
-#### Server Code (`src/server/`)
+#### Server Code (`server/`)
 - **Purpose**: Server-side logic, data access, business logic
-- **Structure**:
-  - `config/`: Configuration files, environment setup
-  - `repositories/`: Data access layer (database queries, API calls)
-  - `services/`: Business logic, orchestration
-- **Usage**: Next.js Server Components, Server Actions, API routes
+- **Structure**: one folder per **domain**, never top-level layer trees
+  - `{domain}/{domain}.repository.ts`: data access, extends `BaseRepository`, internal to the domain
+  - `{domain}/{domain}.service.ts`: business logic and validation — the only entry point for the app
+  - `shared/`: infrastructure the domains extend (`base.repository.ts`)
+  - Environment and config wiring lives in `config/` at the project root, not here
+- **Usage**: Next.js Server Components, Server Actions, API routes — import services only
+- **Data access**: repositories extend `BaseRepository`, which binds queries to one user so
+  Row-Level Security applies. Never import `@/config/db` or another domain's repository;
+  an ESLint rule blocks both from the app layer.
+- **Full spec**: `server/README.md`
 
 #### Hooks (`src/hooks/`)
 - **Purpose**: Reusable React hooks
@@ -124,15 +131,16 @@ src/
 
 #### Types (`src/types/`)
 - **Purpose**: Shared TypeScript definitions
-- **Naming**: PascalCase (e.g., `User.ts`, `ApiResponse.ts`)
+- **Naming**: lowercase, by domain/resource (e.g., `user.ts`, `auth.ts`) — see `types/.gitkeep`.
+  The exported types inside remain PascalCase (`interface AuthContext`).
 
 ### Naming Conventions
 
 - **Components**: PascalCase (e.g., `Button.tsx`, `UserProfile.tsx`)
 - **Hooks**: camelCase with `use` prefix (e.g., `useAuth.ts`)
 - **Utilities**: camelCase (e.g., `formatDate.ts`, `apiClient.ts`)
-- **Types**: PascalCase (e.g., `User.ts`, `Product.ts`)
-- **Server files**: camelCase (e.g., `userService.ts`, `authRepository.ts`)
+- **Types**: lowercase file names (e.g., `user.ts`, `product.ts`); PascalCase for the types themselves
+- **Server files**: `{domain}.service.ts` / `{domain}.repository.ts` (e.g., `users/users.service.ts`)
 
 ### Path Aliases
 
@@ -301,7 +309,8 @@ export async function GET() {
    - Feature → `src/components/`
 
 2. **Does this need server-side logic?**
-   - Yes → `src/server/services/` or `src/server/repositories/`
+   - Yes → `server/{domain}/{domain}.service.ts` (business logic) or
+     `server/{domain}/{domain}.repository.ts` (data access)
 
 3. **Is this reusable logic?**
    - Hook → `src/hooks/`
