@@ -38,20 +38,6 @@ jobs:
       lint-command: pnpm lint
       typecheck-command: pnpm typecheck
 
-  build:
-    name: Build
-    needs: [setup, code-quality]
-    uses: uw-datasci/nexus-workflows/.github/workflows/build-node.yml@v4
-    with:
-      node-version: ${{ needs.setup.outputs.node-version }}
-      pnpm-version: ${{ needs.setup.outputs.pnpm-version }}
-      build-command: pnpm build
-      infisical-project-slug: ${{ needs.setup.outputs.infisical-project-slug }}
-      infisical-secret-path: ${{ needs.setup.outputs.infisical-secret-path }}
-    secrets:
-      INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
-      INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-
   deploy-preview:
     name: Deploy Preview
     needs: [setup, code-quality]
@@ -90,7 +76,7 @@ jobs:
   quality-summary:
     name: Quality Gate Summary
     runs-on: ubuntu-latest
-    needs: [code-quality, build]
+    needs: [code-quality, deploy-preview]
     if: always()
     permissions:
       pull-requests: write
@@ -102,4 +88,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           code-quality-result: ${{ needs.code-quality.result }}
-          build-result: ${{ needs.build.result }}
+          build-result: ${{ needs.deploy-preview.result }}
