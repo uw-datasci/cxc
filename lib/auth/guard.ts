@@ -2,6 +2,7 @@ import "server-only";
 
 import { cache } from "react";
 import { notFound, redirect } from "next/navigation";
+import { RaftResponse, withRaft } from "@uw-datasci/raft";
 
 import { UserService } from "@/server/users/users.service";
 import type { AuthContext } from "@/types/auth";
@@ -59,16 +60,29 @@ export async function requireRole(...roles: Role[]): Promise<AuthContext> {
   return ctx;
 }
 
-type RouteContext<TParams> = { params: Promise<TParams> };
+/**
+ * Route segment params, in the shape `withRaft` constrains its context to.
+ *
+ * Declare a route's params as a **type alias**, not an `interface` —
+ * `type Params = { id: string }` picks up an implicit index signature and
+ * satisfies this, whereas an equivalent `interface` does not and will not
+ * compile.
+ */
+type RouteParams = Record<string, string | string[]>;
 
-type RouteHandler<TParams> = (
+type RouteContext<TParams extends RouteParams = RouteParams> = {
+  params: Promise<TParams>;
+};
+
+type RouteHandler<TParams extends RouteParams> = (
   request: Request,
   context: RouteContext<TParams>,
   auth: AuthContext
 ) => Response | Promise<Response>;
 
 /**
- * Wraps a route handler so authorization is enforced at the export site.
+ * Wraps a route handler so authorization — and error quarantine — are enforced
+ * at the export site.
  *
  * Putting the check here rather than inside the handler body makes it visible
  * where the route is declared and greppable across the codebase — you can see
@@ -78,28 +92,23 @@ type RouteHandler<TParams> = (
  * handler never needs to look the caller up again.
  *
  * @example
- * async function handler(_req: Request, _ctx: RouteContext<{ id: string }>, auth: AuthContext) {
- *   return Response.json(await findApplication(auth, ...));
+ * type Params = { id: string };
+ * async function handler(_req: Request, { params }: RouteContext<Params>, auth: AuthContext) {
+ *   return RaftResponse.ok(await findApplication(auth, (await params).id));
  * }
  * export const GET = withAuth(handler, { roles: ["organizer"] });
  */
-export function withAuth<TParams = Record<string, string>>(
+export function withAuth<TParams extends RouteParams = Record<string, string>>(
   handler: RouteHandler<TParams>,
   options?: { roles?: readonly Role[] }
 ) {
-  return async (request: Request, context: RouteContext<TParams>): Promise<Response> => {
+  return withRaft<RouteContext<TParams>>(async (request, context) => {
     const ctx = await getAuthContext();
 
-    if (!ctx) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    if (!ctx) return RaftResponse.unauthorized();
 
-    if (options?.roles && !options.roles.includes(ctx.role)) {
-      // Deliberately identical for "wrong role" and "no such thing" — the
-      // response should not distinguish them.
-      return Response.json({ error: "Not found" }, { status: 404 });
-    }
+    if (options?.roles && !options.roles.includes(ctx.role)) return RaftResponse.notFound();
 
     return handler(request, context, ctx);
-  };
+  });
 }
