@@ -293,14 +293,47 @@ import { useState } from "react"
 Default in Next.js App Router. Use for data fetching, no client-side JavaScript needed.
 
 ### API Routes
-Place in `src/app/api/[route]/route.ts`:
-```typescript
-import { NextResponse } from "next/server"
+Place in `src/app/api/[route]/route.ts`. All routes go through the Raft SDK
+(`@uw-datasci/raft`) — **never** construct `NextResponse`/`Response` by hand, and never
+wrap the whole handler in a try/catch. Full contract: `.github/context/raft-reference.md`.
 
-export async function GET() {
-  return NextResponse.json({ message: "Hello" })
+Guarded routes use `withAuth`, which applies `withRaft` internally:
+
+```typescript
+import { RaftResponse } from "@uw-datasci/raft"
+import { withAuth } from "@/lib/auth/guard"
+import type { AuthContext } from "@/types/auth"
+
+async function handler(_request: Request, _context: unknown, auth: AuthContext) {
+  return RaftResponse.ok({ userId: auth.userId })
 }
+
+export const GET = withAuth(handler, { roles: ["organizer"] })
 ```
+
+Public routes wrap themselves:
+
+```typescript
+import { withRaft, RaftResponse } from "@uw-datasci/raft"
+
+export const GET = withRaft(async (request, { params }) => {
+  const { id } = await params            // Next 16: params is a Promise
+  if (!id) return RaftResponse.badRequest("id is required")
+
+  const event = await new EventService(id).get()   // throws → auto 500 + quarantine
+  if (!event) return RaftResponse.notFound("Event not found")
+
+  return RaftResponse.ok(event)
+})
+```
+
+Two things to know:
+- Use `RaftResponse.badRequest()` / `.forbidden()` for expected 4xx outcomes. Throwing
+  `ApiError("...", 400)` does **not** produce a 400 — `withRaft` quarantines everything
+  it catches and returns a 500 regardless of `statusCode`.
+- Route params must be a **type alias** (`type Params = { id: string }`), not an
+  `interface` — an interface has no implicit index signature and will not satisfy the
+  wrapper's context constraint.
 
 ## Questions to Ask Before Creating Files
 

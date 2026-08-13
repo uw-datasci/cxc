@@ -21,6 +21,7 @@
   "dependencies": {
     "@neondatabase/auth": "0.4.2-beta",
     "@neondatabase/serverless": "^1.1.0",
+    "@uw-datasci/raft": "^1.0.1",
     "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
