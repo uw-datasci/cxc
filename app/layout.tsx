@@ -5,6 +5,7 @@ import type { Metadata, Viewport } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { baseMetadata, baseViewport } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -29,9 +30,6 @@ export const metadata: Metadata = {
     description: "UWaterloo's premier data science competition bridging students and industry",
   },
   twitter: {
-    // `summary` rather than `summary_large_image`: there is no OG image asset
-    // yet, and the large-image card renders badly without one. Switch back once
-    // public/meta/og-image.png (1200x630) exists, and add `images` to both.
     card: "summary",
     title: "CxC - UWaterloo Data Science Competition",
     description: "UWaterloo's premier data science competition bridging students and industry",
@@ -53,6 +51,7 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider>{children}</ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
