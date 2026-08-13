@@ -1,17 +1,17 @@
 {
   "dev": {
     "driver": "pg",
-    "ENV": "ADMIN_DATABASE_URL",
+    "ENV": "MIGRATE_DB_URL",
     "multipleStatements": true
   },
   "test": {
     "driver": "pg",
-    "ENV": "ADMIN_DATABASE_URL",
+    "ENV": "MIGRATE_DB_URL",
     "multipleStatements": true
   },
   "prod": {
     "driver": "pg",
-    "ENV": "ADMIN_DATABASE_URL",
+    "ENV": "MIGRATE_DB_URL",
     "multipleStatements": true
   },
   "sql-file": true

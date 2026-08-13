@@ -1,16 +1,31 @@
-/* Restore app_public to its previous (over-privileged) state.
+/* Withdraw the privileges granted by the up migration.
  *
- * This is a genuine rollback of the migration, not a recommendation — the
- * prior state let app_public bypass RLS and read/write every table. Only run
- * this if a deploy has to be reverted to a commit that predates the
- * least-privilege model.
+ * The roles themselves are deliberately left in place: they are provisioned
+ * outside the migration set (scripts/bootstrap-roles.sql), so dropping them
+ * here would destroy state this migration never created, and would invalidate
+ * the stored connection strings.
+ *
+ * Leaving them also avoids a sharp edge — dropping and recreating a role
+ * changes its OID, and Neon's pooler keeps serving the old one, so pooled
+ * connections fail with "invalid role OID" until the compute endpoint is
+ * restarted. A rollback should not take the app offline.
  */
 
-GRANT neon_superuser TO app_public;
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM app_public;
+REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM app_public;
+REVOKE ALL ON SCHEMA public FROM app_public;
+REVOKE ALL ON SCHEMA public FROM app_admin;
 
-ALTER ROLE app_public
-  BYPASSRLS
-  CREATEDB
-  CREATEROLE;
+/* The default privileges granted FOR ROLE app_admin are revoked by the
+ * auth-schema down migration, which db-migrate always runs before this one and
+ * which does so under SET ROLE app_admin. Repeating them here would fail with
+ * "permission denied to change default privileges": altering another role's
+ * defaults requires holding that role's privileges, and neondb_owner's
+ * membership in app_admin is deliberately INHERIT FALSE. */
 
-GRANT USAGE ON SCHEMA public TO app_public;
+/* Restore the default the up migration revoked. */
+GRANT USAGE ON SCHEMA public TO PUBLIC;
+
+/* The app_admin -> neondb_owner SET grant is left in place. Re-granting it in
+ * the up migration is idempotent, and revoking it here would strand any
+ * concurrent session that had already assumed the role. */

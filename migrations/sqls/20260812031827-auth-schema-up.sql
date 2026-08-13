@@ -6,9 +6,16 @@
  * permissions, can't be constrained by a foreign key, and is written through
  * an admin API gated behind a literal `admin` role.
  *
- * Tables are owned by app_admin (the migration role). app_public receives only
- * the DML it needs, granted explicitly at the bottom of this file.
+ * Tables are owned by app_admin. The migration itself connects as neondb_owner
+ * — app_admin is no longer a neon_superuser member and is not the connecting
+ * identity — so we SET ROLE for the duration. Without this the tables would be
+ * owned by neondb_owner and the ALTER DEFAULT PRIVILEGES at the bottom, which
+ * is scoped FOR ROLE app_admin, would silently never apply to them.
+ *
+ * app_public receives only the DML it needs, granted explicitly at the bottom.
  */
+
+SET ROLE app_admin;
 
 /* Editable role list: adding a role is an INSERT, not a migration. */
 CREATE TABLE app_role (
@@ -88,3 +95,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE app_admin IN SCHEMA public
 
 ALTER DEFAULT PRIVILEGES FOR ROLE app_admin IN SCHEMA public
   GRANT USAGE, SELECT ON SEQUENCES TO app_public;
+
+/* Hand the session back to neondb_owner so db-migrate can record this
+ * migration in its own bookkeeping table, which app_admin cannot write. */
+RESET ROLE;

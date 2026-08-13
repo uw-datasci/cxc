@@ -18,34 +18,24 @@ exports.setup = function(options, seedLink) {
   Promise = options.Promise;
 };
 
-exports.up = function(db) {
-  var filePath = path.join(__dirname, 'sqls', '20260812031821-role-hardening-up.sql');
-  return new Promise( function( resolve, reject ) {
-    fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+function runSqlFile(db, name) {
+  var filePath = path.join(__dirname, 'sqls', name);
+  return new Promise(function (resolve, reject) {
+    fs.readFile(filePath, { encoding: 'utf-8' }, function (err, data) {
       if (err) return reject(err);
-      console.log('received data: ' + data);
-
       resolve(data);
     });
-  })
-  .then(function(data) {
+  }).then(function (data) {
     return db.runSql(data);
   });
+}
+
+exports.up = function(db) {
+  return runSqlFile(db, '20260812031821-role-hardening-up.sql');
 };
 
 exports.down = function(db) {
-  var filePath = path.join(__dirname, 'sqls', '20260812031821-role-hardening-down.sql');
-  return new Promise( function( resolve, reject ) {
-    fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
-      if (err) return reject(err);
-      console.log('received data: ' + data);
-
-      resolve(data);
-    });
-  })
-  .then(function(data) {
-    return db.runSql(data);
-  });
+  return runSqlFile(db, '20260812031821-role-hardening-down.sql');
 };
 
 exports._meta = {

@@ -19,36 +19,19 @@ const isProduction = process.env.NODE_ENV === "production";
 const isCI = process.env.CI === "true";
 
 if (!isProduction && !isCI) {
-  const rootEnvLocal = path.join(projectRoot, ".env.local");
   const rootEnv = path.join(projectRoot, ".env");
-  let envLoaded = false;
-  if (fs.existsSync(rootEnvLocal)) {
-    dotenv.config({ path: rootEnvLocal });
-    console.log("✓ Loaded environment from .env.local");
-    envLoaded = true;
-  }
   if (fs.existsSync(rootEnv)) {
     dotenv.config({ path: rootEnv });
-    if (!envLoaded) {
-      console.log("✓ Loaded environment from .env");
-    }
-    envLoaded = true;
-  }
-  if (!envLoaded) {
-    console.warn("⚠ Warning: No .env.local or .env found; using process env only\n");
+    console.log("✓ Loaded environment from .env");
+  } else {
+    console.warn("⚠ Warning: No .env found; using process env only\n");
   }
 } else {
   console.log(`✓ Running in ${isProduction ? "production" : "CI"} mode`);
 }
 
-// Migrations run as app_admin, not app_public: they create tables, alter role
-// attributes, and manage grants. app_public is deliberately restricted to DML
-// (see migrations/sqls/*-role-hardening-up.sql) and cannot perform any of it.
-if (!process.env.ADMIN_DATABASE_URL) {
-  console.error("❌ ERROR: ADMIN_DATABASE_URL environment variable is not set");
-  console.error(
-    "\nFor local development, add ADMIN_DATABASE_URL to .env.local (see .env.example)\n"
-  );
+if (!process.env.MIGRATE_DB_URL) {
+  console.error("❌ ERROR: MIGRATE_DB_URL environment variable is not set");
   process.exit(1);
 }
 
@@ -62,9 +45,7 @@ const args = process.argv.slice(3);
 
 const dbMigrateBin = path.join(projectRoot, "node_modules", "db-migrate", "bin", "db-migrate");
 const dbMigrateArgs = [dbMigrateBin, "-m", migrationsDir, command, ...args];
-if (command === "create" && !args.includes("--sql-file")) {
-  dbMigrateArgs.push("--sql-file");
-}
+if (command === "create" && !args.includes("--sql-file")) dbMigrateArgs.push("--sql-file");
 
 console.log(`\n🔄 Running database migration: ${command}\n`);
 

@@ -1,45 +1,71 @@
-/* Strip app_public down to a genuine least-privilege request-path role.
+/* Privilege structure for the application roles.
  *
- * WHY: app_public was created through the Neon Console, which grants
- * neon_superuser to every role it creates. That membership carries
- * pg_read_all_data and pg_write_all_data, and the role additionally had
- * BYPASSRLS, CREATEROLE and CREATEDB set directly. Verified 2026-08-11:
+ * The roles themselves are created once by scripts/bootstrap-roles.sql, run in
+ * the Neon SQL Editor — see that file for why they cannot be created from the
+ * Neon Roles tab, and why the password cannot be deferred. This migration only
+ * grants; it never creates a role and never handles a credential.
  *
- *   rolname     rolsuper  rolbypassrls  rolcreaterole  rolcreatedb
- *   app_public  false     true          true           true
- *   pg_has_role('app_public','pg_read_all_data','usage')  = true
- *   pg_has_role('app_public','pg_write_all_data','usage') = true
+ * An earlier version of this migration tried to strip privileges off roles that
+ * already existed, starting with `REVOKE neon_superuser FROM app_public`. That
+ * is impossible on Neon: those grants come from `cloud_admin` with
+ * admin_option = false, and Postgres 16+ requires ADMIN OPTION to revoke a role
+ * membership. Verified against this database 2026-08-12 — ALTER ROLE, DROP
+ * ROLE, and even CONNECTION LIMIT are refused too.
  *
- * Until this runs, every GRANT/REVOKE and every RLS policy in later
- * migrations is inert for app_public: it reads and writes every table
- * regardless, and BYPASSRLS skips policy evaluation entirely.
- *
- * NOTE: this migration must run as app_admin (ADMIN_DATABASE_URL), which is
- * why database.json points at that variable. ALTER ROLE ... NOBYPASSRLS
- * normally requires superuser; app_admin is not a superuser, only a member of
- * neon_superuser. If Neon rejects these statements, the fallback is to create
- * a fresh restricted role with SQL (roles created via SQL are NOT granted
- * neon_superuser, unlike Console/CLI/API-created ones) and repoint
- * DATABASE_URL at it. Failing loudly here is intentional.
+ * A trap worth recording: `REVOKE pg_read_all_data FROM app_public` *succeeds*
+ * as a no-op, because that access is inherited via neon_superuser rather than
+ * granted directly, and Postgres allows revoking a grant that does not exist.
+ * Working around the original error that way would have produced a green
+ * migration against a role that still read and wrote every table.
  */
 
-REVOKE neon_superuser FROM app_public;
+/* Fail with an actionable message rather than letting a missing role surface as
+ * an opaque "role app_admin does not exist" three migrations later. */
+DO $$
+DECLARE
+  missing text;
+BEGIN
+  SELECT string_agg(r, ', ') INTO missing
+  FROM   unnest(ARRAY['app_admin', 'app_public']) AS r
+  WHERE  NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = r);
 
-ALTER ROLE app_public
-  NOBYPASSRLS
-  NOCREATEDB
-  NOCREATEROLE
-  NOREPLICATION;
+  IF missing IS NOT NULL THEN
+    RAISE EXCEPTION
+      'Missing database role(s): %. Run scripts/bootstrap-roles.sql in the Neon SQL Editor first.', missing
+      USING HINT = 'Roles are provisioned once, outside migrations, so no password is ever passed to pnpm migrate.';
+  END IF;
+END $$;
 
-/* app_public keeps only what the request path needs. Object-level grants for
- * application tables are issued in the auth-schema migration; these are the
- * baseline schema-level rights. */
-REVOKE ALL ON SCHEMA public FROM app_public;
-GRANT USAGE ON SCHEMA public TO app_public;
+/* app_public gets USAGE and nothing more; object-level DML is granted
+ * explicitly in the auth-schema migration. app_admin owns the objects, so it
+ * needs CREATE. Neither is a member of the other. */
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
 
-/* Neon Auth owns its schema (owner: neon_auth) and manages its own grants.
- * The request path never queries it directly — identity comes from the SDK
- * over HTTP, and user_id is joined against our own tables. Explicitly ensure
- * app_public has no access to credential material in neon_auth.account. */
+GRANT USAGE          ON SCHEMA public TO app_public;
+GRANT USAGE, CREATE  ON SCHEMA public TO app_admin;
+
+/* Migrations connect as neondb_owner but must create objects *as* app_admin so
+ * that ownership — and `ALTER DEFAULT PRIVILEGES FOR ROLE app_admin` in the
+ * auth-schema migration — behave as documented.
+ *
+ * Postgres 16+ automatically grants the creating role membership in the new
+ * role, but on Neon that automatic grant arrives rewritten by the control plane
+ * — grantor cloud_admin, admin_option true, set_option FALSE — so neondb_owner
+ * cannot actually SET ROLE app_admin without help:
+ *
+ *   role       member        admin_option  inherit_option  set_option  grantor
+ *   app_admin  neondb_owner  true          false           false       cloud_admin
+ *
+ * The ADMIN OPTION it does carry is enough to grant itself the missing SET.
+ * Note the shape carefully: re-granting ADMIN here fails outright with "ADMIN
+ * option cannot be granted back to your own grantor", and INHERIT is left off
+ * deliberately so neondb_owner must opt in via SET ROLE rather than silently
+ * absorbing app_admin's privileges into every session. */
+GRANT app_admin TO neondb_owner WITH SET TRUE, INHERIT FALSE;
+
+/* Neon Auth owns its schema (owner: neon_auth) and manages its own grants. The
+ * request path never queries it directly — identity comes from the SDK over
+ * HTTP, and user_id is joined against our own tables. Make sure app_public has
+ * no path to credential material in neon_auth.account. */
 REVOKE ALL ON ALL TABLES IN SCHEMA neon_auth FROM app_public;
 REVOKE ALL ON SCHEMA neon_auth FROM app_public;

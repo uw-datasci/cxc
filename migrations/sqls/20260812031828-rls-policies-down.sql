@@ -1,3 +1,7 @@
+/* Owned by app_admin; neondb_owner's membership is INHERIT FALSE, so assume the
+ * role explicitly to hold owner privileges. Mirrors the up migration. */
+SET ROLE app_admin;
+
 DROP FUNCTION IF EXISTS grant_user_role(uuid, text);
 
 DROP POLICY IF EXISTS role_change_log_read ON role_change_log;
@@ -13,3 +17,5 @@ ALTER TABLE user_role DISABLE ROW LEVEL SECURITY;
 
 DROP FUNCTION IF EXISTS app_current_role();
 DROP FUNCTION IF EXISTS app_current_user_id();
+
+RESET ROLE;

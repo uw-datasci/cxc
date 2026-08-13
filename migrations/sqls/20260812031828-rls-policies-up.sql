@@ -19,6 +19,14 @@
  * that path solely through the Data API.
  */
 
+/* Both functions below are SECURITY DEFINER, so they execute with the
+ * privileges of their owner — that owner must be app_admin, not the connecting
+ * role. Migrations connect as neondb_owner, so SET ROLE for the duration.
+ * Owning them as neondb_owner would hand the request path a function running
+ * with a neon_superuser member's rights, which is strictly worse than the
+ * over-privileged app_public this migration set replaced. */
+SET ROLE app_admin;
+
 /* Identity of the current request. Returns NULL when unset, so every policy
  * below evaluates to NULL -> no rows. Fail-closed by construction. */
 CREATE FUNCTION app_current_user_id() RETURNS uuid
@@ -153,3 +161,6 @@ $$;
 
 REVOKE ALL ON FUNCTION grant_user_role(uuid, text) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION grant_user_role(uuid, text) TO app_public;
+
+/* Back to neondb_owner for db-migrate's bookkeeping write. */
+RESET ROLE;
