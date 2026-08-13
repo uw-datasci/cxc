@@ -1,0 +1,20 @@
+name: Dispatch Docs Update
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  dispatch:
+    name: Dispatch Docs Update
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.head.repo.full_name == github.repository }}
+    uses: uw-datasci/nexus-workflows/.github/workflows/dispatch-docs-update.yml@v4
+    with:
+      app-name: "🏆 CxC"
+    secrets:
+      DOCS_DISPATCH_TOKEN: ${{ secrets.DOCS_DISPATCH_TOKEN }}
