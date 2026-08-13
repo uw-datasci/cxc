@@ -38,35 +38,32 @@ jobs:
       lint-command: pnpm lint
       typecheck-command: pnpm typecheck
 
-  deploy-preview:
-    name: Deploy Preview
+  build:
+    name: Build
     needs: [setup, code-quality]
-    uses: uw-datasci/nexus-workflows/.github/workflows/deploy-vercel.yml@v4
+    uses: uw-datasci/nexus-workflows/.github/workflows/build-node.yml@v4
     with:
       node-version: ${{ needs.setup.outputs.node-version }}
       pnpm-version: ${{ needs.setup.outputs.pnpm-version }}
-      is-prod: false
+      build-command: pnpm build
       infisical-project-slug: ${{ needs.setup.outputs.infisical-project-slug }}
       infisical-secret-path: ${{ needs.setup.outputs.infisical-secret-path }}
     secrets:
       INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
       INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
   preview-comment:
     name: Post Preview URL
     runs-on: ubuntu-latest
-    needs: deploy-preview
-    if: ${{ github.event_name == 'pull_request' && needs.deploy-preview.result == 'success' }}
+    needs: build
+    if: ${{ github.event_name == 'pull_request' && needs.build.result == 'success' }}
     permissions:
       pull-requests: write
     steps:
       - name: Comment preview URL on PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PREVIEW_URL: ${{ needs.deploy-preview.outputs.deployment-url }}
+          PREVIEW_URL: ${{ needs.build.outputs.deployment-url }}
           PR_NUMBER: ${{ github.event.number }}
         run: |
           gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" \
@@ -76,7 +73,7 @@ jobs:
   quality-summary:
     name: Quality Gate Summary
     runs-on: ubuntu-latest
-    needs: [code-quality, deploy-preview]
+    needs: [code-quality, build]
     if: always()
     permissions:
       pull-requests: write
@@ -88,4 +85,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           code-quality-result: ${{ needs.code-quality.result }}
-          build-result: ${{ needs.deploy-preview.result }}
+          build-result: ${{ needs.build.result }}
