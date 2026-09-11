@@ -21,9 +21,10 @@ export function SignUpForm({ redirectTo = "/" }: Readonly<{ redirectTo?: string 
     setError(null);
 
     const form = new FormData(event.currentTarget);
+    const email = String(form.get("email"));
     const { error: signUpError } = await authClient.signUp.email({
       name: String(form.get("name")),
-      email: String(form.get("email")),
+      email,
       password: String(form.get("password")),
     });
 
@@ -33,9 +34,22 @@ export function SignUpForm({ redirectTo = "/" }: Readonly<{ redirectTo?: string 
       return;
     }
 
+    /**
+     * Sign-up leaves the user signed in but unverified, so the code is
+     * requested from here rather than by Neon's `sendVerificationEmailOnSignUp`
+     * flag. Doing it in one place means a user never receives two codes — only
+     * the newest one validates — and gives `/verify-email` a resend to offer.
+     *
+     * A failed send is deliberately not fatal: the account exists and the
+     * session is live, so the useful place to recover is the verify screen,
+     * which can resend. Blocking here would strand a real account behind an
+     * error the user cannot act on.
+     */
+    await authClient.emailOtp.sendVerificationOtp({ email, type: "email-verification" });
+
     // No role provisioning needed: a user with no `user_role` row resolves to
     // the base `user` role in getAuthContext().
-    router.push(redirectTo);
+    router.push("/verify-email");
     router.refresh();
   }
 

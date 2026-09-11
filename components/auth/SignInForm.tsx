@@ -21,8 +21,9 @@ export function SignInForm({ redirectTo = "/" }: Readonly<{ redirectTo?: string 
     setError(null);
 
     const form = new FormData(event.currentTarget);
-    const { error: signInError } = await authClient.signIn.email({
-      email: String(form.get("email")),
+    const email = String(form.get("email"));
+    const { data, error: signInError } = await authClient.signIn.email({
+      email,
       password: String(form.get("password")),
     });
 
@@ -31,6 +32,19 @@ export function SignInForm({ redirectTo = "/" }: Readonly<{ redirectTo?: string 
       // password" tells an attacker which emails are registered.
       setError("That email and password combination didn't work.");
       setPending(false);
+      return;
+    }
+
+    /**
+     * Someone who abandoned the flow at sign-up still has a real account and a
+     * valid password, so they land here rather than at /sign-up. Send a fresh
+     * code and take them to the verify screen: the one from sign-up has almost
+     * certainly expired, and requireUser() would bounce them there anyway.
+     */
+    if (data && !data.user.emailVerified) {
+      await authClient.emailOtp.sendVerificationOtp({ email, type: "email-verification" });
+      router.push("/verify-email");
+      router.refresh();
       return;
     }
 

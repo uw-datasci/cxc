@@ -10,6 +10,7 @@ import type { Role } from "./roles";
 import { auth } from "./server";
 
 const SIGN_IN_PATH = "/sign-in";
+const VERIFY_EMAIL_PATH = "/verify-email";
 
 /**
  * Resolves the current caller: identity from Neon Auth, role from `user_role`.
@@ -36,14 +37,26 @@ export const getAuthContext = cache(async (): Promise<AuthContext | null> => {
 });
 
 /**
- * Requires an authenticated caller, redirecting to sign-in otherwise.
+ * Requires an authenticated caller with a verified email address.
  *
  * For Server Components and Server Actions. Route handlers should use
- * {@link withAuth}, which returns a 401 rather than a redirect.
+ * {@link withAuth}, which returns a status code rather than a redirect.
+ *
+ * Verification is enforced here rather than at the auth server: Neon's
+ * `requireEmailVerification` would block sign-in outright, which leaves a user
+ * who never finished the flow with no session and therefore no way back to the
+ * OTP screen. Letting the session exist but gating what it can reach keeps
+ * `/verify-email` reachable, and keeps the rule in one greppable place.
+ *
+ * Pages that must stay reachable by an unverified caller — `/verify-email`
+ * itself, above all — should call {@link getAuthContext} directly. Using
+ * `requireUser()` there would redirect the user to the page they are already
+ * on, in a loop.
  */
 export async function requireUser(): Promise<AuthContext> {
   const ctx = await getAuthContext();
   if (!ctx) redirect(SIGN_IN_PATH);
+  if (!ctx.emailVerified) redirect(VERIFY_EMAIL_PATH);
   return ctx;
 }
 
@@ -91,6 +104,11 @@ type RouteHandler<TParams extends RouteParams> = (
  * The resolved {@link AuthContext} is passed as the third argument, so the
  * handler never needs to look the caller up again.
  *
+ * An unverified caller gets a 403 — distinct from the 401 a signed-out caller
+ * gets, so the client can tell "sign in" apart from "finish verifying" and
+ * route to the right screen. Pass `allowUnverified` for the rare route that
+ * must serve a half-onboarded user.
+ *
  * @example
  * type Params = { id: string };
  * async function handler(_req: Request, { params }: RouteContext<Params>, auth: AuthContext) {
@@ -100,12 +118,19 @@ type RouteHandler<TParams extends RouteParams> = (
  */
 export function withAuth<TParams extends RouteParams = Record<string, string>>(
   handler: RouteHandler<TParams>,
-  options?: { roles?: readonly Role[] }
+  options?: { roles?: readonly Role[]; allowUnverified?: boolean }
 ) {
   return withRaft<RouteContext<TParams>>(async (request, context) => {
     const ctx = await getAuthContext();
 
     if (!ctx) return RaftResponse.unauthorized();
+
+    if (!ctx.emailVerified && !options?.allowUnverified) {
+      return RaftResponse.forbidden(
+        "Verify your email address to continue.",
+        "Email not verified"
+      );
+    }
 
     if (options?.roles && !options.roles.includes(ctx.role)) return RaftResponse.notFound();
 
