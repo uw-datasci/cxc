@@ -68,7 +68,15 @@ export function SignInForm({ redirectTo = "/" }: Readonly<{ redirectTo?: string 
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="password">Password</Label>
+          <div className="flex items-center justify-between gap-2">
+            <Label htmlFor="password">Password</Label>
+            <Link
+              href="/forgot-password"
+              className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-4"
+            >
+              Forgot password?
+            </Link>
+          </div>
           <Input
             id="password"
             name="password"
