@@ -1,15 +1,16 @@
 import "./globals.css";
 
-import { Geist_Mono, Inter, Lora } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import type { Metadata, Viewport } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { baseMetadata, baseViewport } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/next";
 
-const lora = Lora({subsets:['latin'],variable:'--font-serif'});
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const fontSans = Geist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
@@ -49,7 +50,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, inter.variable, "font-serif", lora.variable)}
+      className={cn("antialiased font-sans", fontSans.variable, fontMono.variable)}
     >
       <body>
         <ThemeProvider>{children}</ThemeProvider>
