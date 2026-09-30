@@ -1,103 +1,149 @@
+---
+description: CxC design system (colours, typography, components, icons) and file organization. Use when creating or editing any page, component, layout, or style.
+globs: app/**/*.tsx, components/**/*.tsx, app/globals.css
+alwaysApply: false
+---
+
 # Cursor Rules - Design System & File Organization
 
 ## Design System
 
-### UI Component Library
+The full guide is `.github/context/design-system.md` — read it before building UI:
 
-- **Framework**: shadcn/ui (New York style)
-- **Styling**: Tailwind CSS v4 with CSS variables
-- **Color System**: OKLCH color space with CSS variables for theming
-- **Component Variants**: Use `class-variance-authority` (cva) for component variants
-- **UI Primitives**: Radix UI primitives for accessible components
-- **Icons**: Lucide React (`lucide-react`)
-- **Animations**: Framer Motion (`framer-motion`)
-- **Utility Function**: Use `cn()` from `@/lib/utils` for className merging (combines clsx + tailwind-merge)
+@.github/context/design-system.md
 
-### Design Tokens
+Values live in `app/globals.css`. Figma source: file `Vw3IyW4rgAoA2hysaFDRsd`, design
+system node `1256:24247`, reference page node `1169:14700`.
 
-- Colors are defined in `src/app/globals.css` using CSS variables
-- Supports dark mode via `.dark` class
-- Border radius: `--radius` (0.625rem default) with variants (sm, md, lg, xl)
-- Use semantic color tokens: `primary`, `secondary`, `muted`, `accent`, `destructive`, etc.
-- Always use CSS variable-based colors, never hardcoded color values
+### Stack
+
+- **UI library**: shadcn/ui (`radix-vega` style) on Radix primitives, with `cva` for variants
+- **Styling**: Tailwind CSS v4, with tokens as CSS variables in `app/globals.css`
+- **Fonts**: Alte Haas Grotesk (`font-sans`, the default) and Atkinson Hyperlegible Mono
+  (`font-mono`), both loaded in `app/layout.tsx`
+- **Icons**: Phosphor (`@phosphor-icons/react`)
+- **Utility**: `cn()` from `@/lib/utils` for className merging
+
+### Cheat sheet
+
+1. **One light theme.** No dark mode and no `dark:` variants.
+2. **Semantic tokens first:**
+   - `bg-background` (GREY) for the page
+   - `bg-card` (SMOKE) for raised surfaces
+   - `text-foreground` (BLACK) for text
+   - `text-muted-foreground` (MID GREY) for captions
+   - `border-border` (GRID GREY) for every line
+3. **`primary` is BLUE.** Use it for *the* main CTA of a view, section bars, active states,
+   links, and accent headings, with `text-primary-foreground` (SMOKE) on top. Hover and
+   pressed states use `bg-dark-blue`.
+4. **`secondary`, `muted`, and `accent` are SEMI GREY** — secondary buttons, subtle fills,
+   hover backgrounds. `destructive` is for errors only.
+5. **Brand utilities** — only when no semantic token fits: `dark-blue` for hover, `navy` for
+   deep emphasis, `dark-grey` for dark panels. `black` is `#101010`.
+6. **Never** use hex/rgb literals, arbitrary colours (`bg-[#…]`), Tailwind's default palette
+   (`gray-*`, `blue-*`, `white`, …), gradients, or coloured shadows.
+7. **Contrast:** light text only on BLUE, DARK BLUE, NAVY, DARK GREY, or BLACK. BLUE or MID
+   GREY text on GREY is for large or non-essential text only.
+8. **Fonts:**
+   - `font-sans` is Alte Haas Grotesk (the default; headings and body). It has only
+     `font-normal` and `font-bold`, so never `font-medium` or `font-semibold`.
+   - `font-mono` is Atkinson Hyperlegible Mono (weights 200–800), for nav, buttons, labels,
+     meta text, and data.
+9. **Mono labels:** `font-mono uppercase tracking-widest`. **Section titles:**
+   `font-bold uppercase`.
+10. **Header scale:** `text-header-main` 36 / `text-header-sub` 20 / `text-header-small` 18 /
+    `text-header-tiny` 16. `h1`–`h4` apply these by default, so use semantic heading tags.
+11. **Square corners** (`--radius: 0`). No `rounded-full` or arbitrary radii except true
+    circles.
+12. **Borders, not shadows.** `shadow-xs` at most.
+13. **Reuse `@/components/ui`** (Button, Card, Input, Label) before writing markup. Add
+    primitives with `pnpm ui:add <name>`.
+14. **Icons are Phosphor:** `@phosphor-icons/react`, with `/dist/ssr` in server components,
+    and the `*Icon` names. Not Lucide.
+15. **Merge classes with `cn()`** from `@/lib/utils`. Never import fonts outside
+    `app/layout.tsx`.
 
 ### Component Patterns
 
-- All UI components should accept `className` prop and merge with `cn()`
+- All UI components should accept a `className` prop and merge it with `cn()`
 - Use `data-slot` attributes for component identification
 - Components should be composable and follow shadcn/ui patterns
-- Use TypeScript for all components with proper type definitions
-- Export component variants when using `cva` for external customization
+- Use TypeScript for all components, with proper type definitions
+- Export component variants when using `cva`, for external customization
 
 ## File Organization
 
 ### Directory Structure
 
+There is no `src/` directory; everything sits at the repo root.
+
 ```
-src/
-├── app/                    # Next.js App Router
-│   ├── api/               # API routes
-│   ├── layout.tsx         # Root layout
-│   ├── page.tsx           # Pages
-│   └── globals.css        # Global styles and design tokens
-│
-├── components/            # React components
-│   ├── ui/               # shadcn/ui components (reusable, generic)
-│   └── [feature]/        # Feature-specific components (e.g., animated-box.tsx)
-│
-├── lib/                   # Utility functions and helpers
-│   ├── utils.ts          # Core utilities (cn function)
-│   ├── utils/            # Additional utility modules
-│   └── api/              # API-related utilities and clients
-│
+app/                       # Next.js App Router
+├── (auth)/                # Auth route group (sign-in, sign-up, …)
+├── api/                   # API routes (Raft SDK — see .github/context/raft-reference.md)
+├── fonts/                 # Self-hosted font files (Alte Haas Grotesk + licence)
+├── layout.tsx             # Root layout (fonts, ThemeProvider)
+├── page.tsx               # Pages
+└── globals.css            # Design tokens
+
+components/                # React components
+├── ui/                    # shadcn/ui components (reusable, generic)
+└── [feature]/             # Feature-specific components (e.g., auth/, home/)
+
+lib/                       # Utilities and helpers
+├── utils.ts               # Core utilities (cn function)
+├── utils/                 # Additional utility modules
+├── api/                   # API-related utilities and clients
+├── auth/                  # Auth helpers (withAuth guard)
 ├── hooks/                 # Custom React hooks
 ├── contexts/              # React contexts
-├── providers/             # React providers (theme, auth, etc.)
-├── types/                 # TypeScript type definitions
-│
-└── server/                # Server-side code, organized by DOMAIN not by layer
-    ├── README.md         # Full spec — read before adding server code
-    ├── shared/           # Infrastructure the domains extend (base.repository.ts)
-    └── users/            # One folder per domain
-        ├── users.service.ts      # Business logic; what the app imports
-        └── users.repository.ts   # Data access; internal to the domain
+└── providers/             # React providers
+
+types/                     # TypeScript type definitions
+config/                    # Environment and config wiring (db, client/server env)
+
+server/                    # Server-side code, organized by DOMAIN not by layer
+├── README.md              # Full spec — read before adding server code
+├── shared/                # Infrastructure the domains extend (base.repository.ts)
+└── users/                 # One folder per domain
+    ├── users.service.ts       # Business logic; what the app imports
+    └── users.repository.ts    # Data access; internal to the domain
 ```
 
 ### File Naming Conventions
 
-- **Components**: PascalCase (e.g., `Button.tsx`, `AnimatedBox.tsx`)
-- **Hooks**: camelCase with `use` prefix (e.g., `useAuth.ts`, `useTheme.ts`)
+- **Components**: PascalCase (e.g., `SignInForm.tsx`, `HomeAuthActions.tsx`). shadcn
+  primitives in `components/ui/` keep shadcn's lowercase names (`button.tsx`).
+- **Hooks**: camelCase with a `use` prefix (e.g., `useAuth.ts`)
 - **Utilities**: camelCase (e.g., `utils.ts`, `apiClient.ts`)
-- **Types**: lowercase, by domain/resource (e.g., `user.ts`, `auth.ts`) — see `types/.gitkeep`.
+- **Types**: lowercase, by domain/resource (e.g., `user.ts`, `auth.ts`) — see `types/README.md`.
   The exported types inside remain PascalCase (`interface AuthContext`).
 - **Server files**: `{domain}.service.ts` / `{domain}.repository.ts` (e.g., `users/users.service.ts`)
 
 ### Path Aliases
 
-Use these TypeScript path aliases (configured in `tsconfig.json`):
+`@/*` maps to the repo root (configured in `tsconfig.json`):
 
-- `@/components` → `src/components`
-- `@/components/ui` → `src/components/ui`
-- `@/lib` → `src/lib`
-- `@/lib/utils` → `src/lib/utils`
-- `@/hooks` → `src/hooks`
+- `@/components`, `@/components/ui`
+- `@/lib`, `@/lib/utils`, `@/lib/hooks`
+- `@/types`, `@/server`, `@/config`
 
-Always use path aliases instead of relative imports when importing from these directories.
+Always use path aliases instead of relative imports when importing across directories.
 
 ### Component Placement Rules
 
-1. **UI Components** (`src/components/ui/`):
+1. **UI Components** (`components/ui/`):
 
    - Generic, reusable components from shadcn/ui
    - Components that are part of the design system
    - Examples: Button, Card, Input, Dialog, etc.
-   - Should be framework-agnostic and highly reusable
+   - Should be highly reusable and styled only with design tokens
 
-2. **Feature Components** (`src/components/`):
+2. **Feature Components** (`components/[feature]/`):
 
-   - Feature-specific or business logic components
+   - Feature-specific or business-logic components
    - Components that compose UI components
-   - Examples: `AnimatedBox`, `UserProfile`, `Dashboard`, etc.
+   - Examples: `SignInForm`, `HomeAuthActions`, etc.
    - Can import from `@/components/ui`
 
 3. **Server Code** (`server/`):
@@ -107,29 +153,29 @@ Always use path aliases instead of relative imports when importing from these di
    - Organize by **domain**, not by layer: `server/{domain}/{domain}.service.ts` and
      `server/{domain}/{domain}.repository.ts`. Do not create top-level `repositories/`
      or `services/` trees.
-   - The app layer imports **services only** — repositories are internal to their domain
+   - The app layer imports **services only** — repositories are internal to their domain,
      and an ESLint rule enforces it
    - Repositories extend `BaseRepository` (`server/shared/base.repository.ts`), which binds
      the query to one user so RLS applies. Never query `@/config/db` directly.
    - See `server/README.md` for the full spec
 
-4. **Hooks** (`src/hooks/`):
+4. **Hooks** (`lib/hooks/`):
 
    - Custom React hooks for shared logic
    - Should be reusable across multiple components
-   - Examples: `useLocalStorage`, `useDebounce`, `useAuth`
+   - Examples: `useAuth`, `useDebounce`
 
-5. **Contexts** (`src/contexts/`):
+5. **Contexts** (`lib/contexts/`):
 
    - React Context providers for global state
-   - Examples: `ThemeContext`, `AuthContext`
+   - Examples: `AuthContext`
 
-6. **Providers** (`src/providers/`):
+6. **Providers** (`lib/providers/`):
 
    - React component providers that wrap the app
-   - Examples: `ThemeProvider`, `AuthProvider`
+   - Examples: `AuthProvider`
 
-7. **Types** (`src/types/`):
+7. **Types** (`types/`):
    - Shared TypeScript type definitions
    - Interfaces, types, enums used across the application
 
@@ -146,10 +192,10 @@ Example:
 
 ```typescript
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { CaretDownIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { User } from "@/types";
+import type { AuthContext } from "@/types/auth";
 ```
 
 ### Component Structure Template
@@ -167,7 +213,7 @@ export function Component({ className, ...props }: ComponentProps) {
   return (
     <div
       data-slot="component"
-      className={cn("base-classes", className)}
+      className={cn("border border-border bg-card p-6", className)}
       {...props}
     />
   );
@@ -176,20 +222,20 @@ export function Component({ className, ...props }: ComponentProps) {
 
 ## Best Practices
 
-1. **Always use `cn()` utility** for className merging
-2. **Use CSS variables** for colors, spacing, and design tokens
-3. **Support dark mode** by using semantic color tokens
-4. **Export component variants** when using `cva` for flexibility
+1. **Always use the `cn()` utility** for className merging
+2. **Use design tokens** for every colour, font, and size — see `.github/context/design-system.md`
+3. **Light theme only**: use semantic tokens and never add `dark:` variants
+4. **Export component variants** when using `cva`, for flexibility
 5. **Use path aliases** (`@/`) instead of relative imports
-6. **Type everything** - use TypeScript for all files
-7. **Follow Next.js conventions** - use App Router patterns
-8. **Separate concerns** - keep UI, logic, and data access separate
-9. **Compose components** - build complex components from simpler UI components
+6. **Type everything** — use TypeScript for all files
+7. **Follow Next.js conventions** — use App Router patterns
+8. **Separate concerns** — keep UI, logic, and data access separate
+9. **Compose components** — build complex components from simpler UI components
 10. **Use `data-slot` attributes** for component identification and styling
 
 ## Adding New Components
 
-- **UI Components**: Add to `src/components/ui/` and follow shadcn/ui patterns
-- **Feature Components**: Add to `src/components/` at root level or in feature folders
+- **UI Components**: Add to `components/ui/` and follow shadcn/ui patterns
+- **Feature Components**: Add to a feature folder under `components/`
 - **Use the `ui:add` script**: Run `pnpm ui:add [component-name]` to add shadcn/ui components
 - **Always export** components and their types/variants when applicable

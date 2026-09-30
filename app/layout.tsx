@@ -1,20 +1,26 @@
 import "./globals.css";
 
-import { Geist, Geist_Mono } from "next/font/google";
+import { Atkinson_Hyperlegible_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import type { Metadata, Viewport } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { baseMetadata, baseViewport } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/next";
 
-const fontSans = Geist({
-  subsets: ["latin"],
+const fontSans = localFont({
+  src: [
+    { path: "./fonts/AlteHaasGroteskRegular.ttf", weight: "400", style: "normal" },
+    { path: "./fonts/AlteHaasGroteskBold.ttf", weight: "700", style: "normal" },
+  ],
   variable: "--font-sans",
 });
 
-const fontMono = Geist_Mono({
+const fontMono = Atkinson_Hyperlegible_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+  adjustFontFallback: false,
+  fallback: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
 });
 
 export const metadata: Metadata = {
@@ -50,7 +56,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased font-sans", fontSans.variable, fontMono.variable)}
+      className={cn("font-sans antialiased", fontSans.variable, fontMono.variable)}
     >
       <body>
         <ThemeProvider>{children}</ThemeProvider>

@@ -1,0 +1,51 @@
+---
+description: Server and API architecture — route handler → domain service → repository → Postgres with RLS. Use when adding or editing API routes, Server Actions, services, repositories, migrations, or data fetching.
+globs: app/api/**/*.ts, app/**/actions.ts, server/**/*.ts, lib/auth/**/*.ts, lib/api/**/*.ts, migrations/**/*.sql
+alwaysApply: false
+---
+
+# Cursor Rules - Server & API Architecture
+
+The full guide is `.github/context/server-architecture.md` — read it before writing server code:
+
+@.github/context/server-architecture.md
+
+Working reference: the `users` domain (`server/users/`) and `app/api/me/route.ts`.
+Also see `server/README.md` (folder spec, RLS rationale) and
+`.github/context/raft-reference.md` (Raft SDK).
+
+## Cheat sheet
+
+1. **Request path:** entry point (`app/api/**/route.ts`, Server Action, or Server Component)
+   → `server/{domain}/{domain}.service.ts` → `server/{domain}/{domain}.repository.ts` →
+   Postgres with RLS. Never skip a layer.
+2. **Organize by domain, not by layer:** `server/applications/` holds both the service and
+   the repository. `server/shared/` is only for infrastructure.
+3. **The app layer imports services only.** Repositories are internal to their domain
+   folder. ESLint blocks `@/server/*/*.repository` and `@/config/db` outside `server/`.
+4. **Services** (`{Entity}Service`, e.g. `UserService`):
+   - take `userId` in the constructor and construct a `private` repository
+   - own validation, business rules, and fallbacks
+   - reach other domains only through their services
+5. **Repositories** (`{Domain}Repository`, e.g. `UsersRepository`):
+   - extend `BaseRepository` and use `this.query`, `this.queryOne`, and `this.transaction`
+     with tagged templates only
+   - contain no business rules
+   - start with `import "server-only"`, like services
+6. **Route handlers:**
+   - guarded routes use `withAuth(handler, { roles })` from `@/lib/auth/guard`
+   - public routes use `withRaft`
+   - respond only with `RaftResponse.*`; no hand-built `NextResponse` and no `try/catch`
+7. **Expected outcomes are returned, not thrown.** Services return `null` or a
+   discriminated result union, and the route maps it to
+   `RaftResponse.notFound()` / `.badRequest()`. Anything thrown becomes a quarantined 500.
+8. **Identity always comes from `auth.userId`** (from `withAuth` / `requireUser()`), never
+   from the request body or query string.
+9. **Route `params` are a `Promise`:** `await` them, and type them with a `type` alias, not
+   an `interface`.
+10. **Server Components and Actions:** `requireUser()` or `requireRole("organizer")`, then a
+    service. Client components call `app/api` routes through fetchers in `lib/api/`.
+11. **Every new table enables RLS and defines its policies in the same migration**
+    (`pnpm migrate:create <name>`). New tables default to full DML for `app_public`.
+12. **Privileged writes** use a `SECURITY DEFINER` function (model: `grant_user_role()`),
+    never `adminSql`.
