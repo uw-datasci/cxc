@@ -132,6 +132,12 @@
       }
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
     @keyframes sheet-out {
       from {
         transform: translateX(0);
@@ -170,6 +176,7 @@
     }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
     }
   h1 {
     @apply font-heading text-header-main;

@@ -34,13 +34,14 @@ export function MobileNav() {
           </SheetHeader>
           <nav aria-label="Mobile navigation" className="mt-8 flex flex-col">
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                className="border-b border-border px-2 py-4 font-mono text-sm tracking-widest uppercase hover:bg-muted"
-                href={link.href}
-              >
-                [{link.label}]
-              </Link>
+              <SheetClose asChild key={link.href}>
+                <Link
+                  className="border-b border-border px-2 py-4 font-mono text-sm tracking-widest uppercase hover:bg-muted"
+                  href={link.href}
+                >
+                  [{link.label}]
+                </Link>
+              </SheetClose>
             ))}
           </nav>
         </SheetContent>
