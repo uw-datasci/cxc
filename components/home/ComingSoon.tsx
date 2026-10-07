@@ -148,9 +148,17 @@ export function ComingSoon() {
             href="https://uwdatascience.ca"
             target="_blank"
             rel="noopener noreferrer"
-            className="absolute top-4 left-4 bg-background p-2 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="absolute top-6 left-6 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
-            <Image src="/home/dsc-logo.svg" alt="UW Data Science Club" width={55} height={52} />
+            {/* A hairline halo in the page colour: invisible on the canvas, it only separates
+                the logo from the terrain where the cropped map runs behind it. */}
+            <Image
+              src="/home/dsc-logo.svg"
+              alt="UW Data Science Club"
+              width={55}
+              height={52}
+              className="drop-shadow-[0_0_1.5px_var(--color-background)]"
+            />
           </a>
 
           <h1>
