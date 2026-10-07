@@ -164,14 +164,15 @@ Avoid arbitrary `text-[17px]` values.
 ### 4.1 Motion
 
 - Use the `animate-*` tokens defined in the motion `@theme` block of `globals.css`
-  (`animate-pop-in`, `animate-draw-x`, `animate-reticle-spin`, …). Add new keyframes there,
+  (`animate-pop-in`, `animate-draw-x`, `animate-compass-needle`, …). Add new keyframes there,
   not inline in components.
 - **Every animation is paired with `motion-reduce:`** — usually `motion-reduce:animate-none`,
   or `motion-reduce:hidden` for purely decorative moving parts. JS-driven motion checks
   `prefers-reduced-motion` and stays still.
-- Motion is mechanical and quiet, like instruments: linear spins, short ease-out entrances,
-  hairlines drawing from their markers. No bounce, elastic, or springy easing, and nothing
-  that loops fast enough to pull focus from the content.
+- Motion is mechanical and quiet, like instruments: short ease-out entrances, hairlines
+  drawing from their markers, slow loops. UI elements never use bounce, elastic, or springy
+  easing. The one exception is an instrument's own physics on a decorative gauge (a compass
+  needle damping to rest). Nothing loops fast enough to pull focus from the content.
 
 ---
 

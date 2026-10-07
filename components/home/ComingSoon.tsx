@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { CSSProperties } from "react";
 
 import { DossierPanel } from "@/components/home/DossierPanel";
-import { Reticle } from "@/components/home/Reticle";
+import { CompassNeedle, Reticle } from "@/components/home/Reticle";
 import { TargetLockProvider, TargetReadout, TargetReticle } from "@/components/home/TargetLock";
 import { cn } from "@/lib/utils";
 
@@ -76,7 +76,7 @@ export function ComingSoon() {
               className="absolute animate-boot-fade motion-reduce:animate-none"
               style={{ ...place(64, -17, 514, 514), animationDelay: "100ms" }}
             >
-              <Reticle variant="scope" />
+              <Reticle variant="compass" />
             </div>
 
             <div className="absolute" style={place(440, -184, TERRAIN.w, TERRAIN.h)}>
@@ -88,6 +88,14 @@ export function ComingSoon() {
               style={place(564.72 - TERRAIN.w, -553, TERRAIN.w, TERRAIN.h)}
             >
               <Image src="/home/terrain.svg" alt="" fill unoptimized />
+            </div>
+
+            {/* The needle sits above the terrain; the compass rings stay below, as in Figma. */}
+            <div
+              className="absolute animate-boot-fade motion-reduce:animate-none"
+              style={{ ...place(64, -17, 514, 514), animationDelay: "100ms" }}
+            >
+              <CompassNeedle />
             </div>
 
             <div
@@ -140,7 +148,7 @@ export function ComingSoon() {
             href="https://uwdatascience.ca"
             target="_blank"
             rel="noopener noreferrer"
-            className="absolute top-6 left-6 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="absolute top-4 left-4 bg-background p-2 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <Image src="/home/dsc-logo.svg" alt="UW Data Science Club" width={55} height={52} />
           </a>

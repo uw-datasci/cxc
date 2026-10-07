@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 
+import { CompassLean } from "@/components/home/CompassLean";
 import { cn } from "@/lib/utils";
 
 type Tone = "border" | "dark-grey" | "card" | "foreground";
@@ -22,7 +23,7 @@ const toneClass: Record<Tone, string> = {
 
 // Ring geometry copied from the Figma "right circles" groups (1169:27131, 1169:27074).
 const geometry = {
-  scope: {
+  compass: {
     size: 514,
     center: { x: 255.992, y: 262.039 },
     rings: [
@@ -60,9 +61,22 @@ export const targetCenter = {
   y: (geometry.target.center.y / geometry.target.size) * 100,
 };
 
+const CARDINALS = [
+  { label: "N", dx: 0, dy: -1 },
+  { label: "E", dx: 1, dy: 0 },
+  { label: "S", dx: 0, dy: 1 },
+  { label: "W", dx: -1, dy: 0 },
+] as const;
+
+/** Rotation pivot for an SVG element, in viewBox units. */
+function pivotAt({ x, y }: { x: number; y: number }): CSSProperties {
+  return { transformOrigin: `${x}px ${y}px` };
+}
+
 /**
  * Concentric-circle reticle from the Figma landing page.
- * - `scope`: a slowly rotating tick bezel and a radar sweep arm.
+ * - `compass`: a fixed compass dial (degree ticks and N/E/S/W). Its needle is the separate
+ *   {@link CompassNeedle}, so it can sit above the terrain while the rings stay below.
  * - `target`: a sonar ping; drift and lock-on live in `TargetLock`.
  */
 export function Reticle({
@@ -70,7 +84,6 @@ export function Reticle({
   className,
 }: Readonly<{ variant: ReticleVariant; className?: string }>) {
   const { size, center, rings } = geometry[variant];
-  const pivot: CSSProperties = { transformOrigin: `${center.x}px ${center.y}px` };
 
   return (
     <svg
@@ -79,7 +92,7 @@ export function Reticle({
       fill="none"
       className={cn(
         "block size-full overflow-visible",
-        variant === "scope" ? "opacity-30" : "opacity-42",
+        variant === "compass" ? "opacity-30" : "opacity-42",
         className
       )}
     >
@@ -94,38 +107,45 @@ export function Reticle({
         />
       ))}
 
-      {variant === "scope" && (
+      {variant === "compass" && (
         <>
-          {/* Tick bezel: a minor tick every 6°, a major tick every 30°. */}
-          <g className="animate-reticle-spin motion-reduce:animate-none" style={pivot}>
-            <circle
-              cx={center.x}
-              cy={center.y}
-              r={196}
-              pathLength={360}
-              strokeWidth={6}
-              strokeDasharray="0.6 5.4"
-              className="stroke-foreground"
-            />
-            <circle
-              cx={center.x}
-              cy={center.y}
-              r={196}
-              pathLength={360}
-              strokeWidth={14}
-              strokeDasharray="0.8 29.2"
-              className="stroke-foreground"
-            />
-          </g>
-          <line
-            x1={center.x}
-            y1={center.y}
-            x2={center.x}
-            y2={center.y - 239.137}
-            strokeWidth={STROKE}
-            className="animate-sweep stroke-foreground motion-reduce:animate-none"
-            style={pivot}
+          {/* Dial: a minor tick every 10°, a major tick every 30°, centred on the angle. */}
+          <circle
+            cx={center.x}
+            cy={center.y}
+            r={196}
+            pathLength={360}
+            strokeWidth={6}
+            strokeDasharray="0.5 9.5"
+            strokeDashoffset={0.25}
+            className="stroke-foreground"
           />
+          <circle
+            cx={center.x}
+            cy={center.y}
+            r={196}
+            pathLength={360}
+            strokeWidth={14}
+            strokeDasharray="0.8 29.2"
+            strokeDashoffset={0.4}
+            className="stroke-foreground"
+          />
+          {CARDINALS.map(({ label, dx, dy }) => (
+            <text
+              key={label}
+              x={center.x + dx * 212}
+              y={center.y + dy * 212}
+              fontSize={18}
+              textAnchor="middle"
+              dominantBaseline="central"
+              className={cn(
+                "font-mono font-bold",
+                label === "N" ? "fill-primary" : "fill-foreground"
+              )}
+            >
+              {label}
+            </text>
+          ))}
         </>
       )}
 
@@ -136,9 +156,52 @@ export function Reticle({
           r={172.871}
           strokeWidth={STROKE * 1.5}
           className="animate-ping-ring stroke-foreground motion-reduce:hidden"
-          style={pivot}
+          style={pivotAt(center)}
         />
       )}
+    </svg>
+  );
+}
+
+const NEEDLE_LENGTH = 130;
+const NEEDLE_HALF_WIDTH = 9;
+
+/**
+ * The compass reticle's needle. It swings to a heading, damps out, holds, then gets nudged
+ * to a new one, and leans a little toward the cursor ({@link CompassLean}); with reduced
+ * motion it rests pointing north. Rendered as its own layer,
+ * in the same box as `<Reticle variant="compass" />`, so the terrain can't cover it.
+ */
+export function CompassNeedle({ className }: Readonly<{ className?: string }>) {
+  const { size, center } = geometry.compass;
+  const { x, y } = center;
+  const w = NEEDLE_HALF_WIDTH;
+
+  return (
+    <svg
+      aria-hidden
+      viewBox={`0 0 ${size} ${size}`}
+      fill="none"
+      className={cn("block size-full overflow-visible opacity-70", className)}
+    >
+      <CompassLean origin={center} size={size}>
+        <g
+          strokeWidth={1.5}
+          strokeLinejoin="round"
+          className="animate-compass-needle stroke-card motion-reduce:animate-none"
+          style={pivotAt(center)}
+        >
+          <polygon
+            points={`${x},${y - NEEDLE_LENGTH} ${x + w},${y} ${x - w},${y}`}
+            className="fill-primary"
+          />
+          <polygon
+            points={`${x},${y + NEEDLE_LENGTH} ${x + w},${y} ${x - w},${y}`}
+            className="fill-foreground"
+          />
+          <circle cx={x} cy={y} r={6} className="fill-card stroke-foreground" />
+        </g>
+      </CompassLean>
     </svg>
   );
 }
