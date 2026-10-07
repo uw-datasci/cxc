@@ -87,7 +87,7 @@ export function SignUpForm({ redirectTo = "/" }: Readonly<{ redirectTo?: string 
         </div>
 
         {error ? (
-          <p role="alert" className="text-destructive text-sm">
+          <p role="alert" className="text-sm text-destructive">
             {error}
           </p>
         ) : null}
@@ -98,14 +98,14 @@ export function SignUpForm({ redirectTo = "/" }: Readonly<{ redirectTo?: string 
       </form>
 
       <div className="flex items-center gap-3">
-        <span className="bg-border h-px flex-1" />
-        <span className="text-muted-foreground text-xs uppercase">or</span>
-        <span className="bg-border h-px flex-1" />
+        <span className="h-px flex-1 bg-border" />
+        <span className="text-xs text-muted-foreground uppercase">or</span>
+        <span className="h-px flex-1 bg-border" />
       </div>
 
       <SocialButtons callbackURL={redirectTo} disabled={pending} />
 
-      <p className="text-muted-foreground text-center text-sm">
+      <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
         <Link href="/sign-in" className="text-foreground underline underline-offset-4">
           Sign in

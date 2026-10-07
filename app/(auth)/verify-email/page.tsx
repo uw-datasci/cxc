@@ -3,7 +3,13 @@ import { redirect } from "next/navigation";
 
 import { VerifyEmailForm } from "@/components/auth/VerifyEmailForm";
 import { getAuthContext } from "@/lib/auth/guard";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export const metadata: Metadata = { title: "Verify your email" };
 
@@ -22,8 +28,8 @@ export default async function VerifyEmailPage() {
       <CardHeader>
         <CardTitle>Check your email</CardTitle>
         <CardDescription>
-          We sent a 6-digit code to <span className="text-foreground">{ctx.email}</span>. It expires
-          in 5 minutes.
+          We sent a 6-digit code to <span className="text-foreground">{ctx.email}</span>. It
+          expires in 5 minutes.
         </CardDescription>
       </CardHeader>
       <CardContent>

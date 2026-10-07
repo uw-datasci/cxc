@@ -59,7 +59,7 @@ export function ForgotPasswordForm() {
         </div>
 
         {error ? (
-          <p role="alert" className="text-destructive text-sm">
+          <p role="alert" className="text-sm text-destructive">
             {error}
           </p>
         ) : null}
@@ -69,7 +69,7 @@ export function ForgotPasswordForm() {
         </Button>
       </form>
 
-      <p className="text-muted-foreground text-center text-sm">
+      <p className="text-center text-sm text-muted-foreground">
         Remembered it?{" "}
         <Link href="/sign-in" className="text-foreground underline underline-offset-4">
           Sign in

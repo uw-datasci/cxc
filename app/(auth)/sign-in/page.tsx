@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 
 import { SignInForm } from "@/components/auth/SignInForm";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export const metadata: Metadata = { title: "Sign in" };
 
