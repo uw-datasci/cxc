@@ -80,7 +80,7 @@ export function Reticle({
       className={cn(
         "block size-full overflow-visible",
         variant === "scope" ? "opacity-30" : "opacity-42",
-        className,
+        className
       )}
     >
       {rings.map((ring) => (

@@ -69,7 +69,7 @@ export function TargetReticle({ children }: Readonly<{ children: ReactNode }>) {
         fill="none"
         className={cn(
           "absolute inset-0 size-full animate-pop-in overflow-visible stroke-primary transition-[opacity,scale] duration-200 ease-out motion-reduce:animate-none motion-reduce:transition-none",
-          tracking ? "scale-140 opacity-0" : "scale-100 opacity-100",
+          tracking ? "scale-140 opacity-0" : "scale-100 opacity-100"
         )}
         style={{ transformOrigin: origin, animationDelay: "900ms" }}
       >
@@ -139,7 +139,7 @@ export function TargetReadout({ className }: Readonly<{ className?: string }>) {
       aria-hidden
       className={cn(
         "flex items-center gap-3 bg-background px-2 py-1 font-mono text-xs tracking-widest whitespace-nowrap uppercase",
-        className,
+        className
       )}
     >
       <span className={cn("size-2 border-2 border-primary", !tracking && "bg-primary")} />

@@ -3,11 +3,7 @@ import type { CSSProperties } from "react";
 
 import { DossierPanel } from "@/components/home/DossierPanel";
 import { Reticle } from "@/components/home/Reticle";
-import {
-  TargetLockProvider,
-  TargetReadout,
-  TargetReticle,
-} from "@/components/home/TargetLock";
+import { TargetLockProvider, TargetReadout, TargetReticle } from "@/components/home/TargetLock";
 import { cn } from "@/lib/utils";
 
 // Decor is laid out in the coordinates of the Figma frame (1169:24809), then scaled to cover
@@ -71,7 +67,7 @@ export function ComingSoon() {
       <main className="relative isolate min-h-svh overflow-hidden">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 overflow-hidden [container-type:size]"
+          className="[container-type:size] pointer-events-none absolute inset-0 overflow-hidden"
         >
           {/* Covers the viewport like object-fit: cover. Narrow screens crop toward the right
               (x 90%) so the target-lock reticle stays in view. */}
@@ -109,7 +105,7 @@ export function ComingSoon() {
                 className={cn(
                   "absolute bg-foreground motion-reduce:animate-none",
                   line.axis === "x" ? "h-px animate-draw-x" : "w-px animate-draw-y",
-                  originClass[line.from],
+                  originClass[line.from]
                 )}
                 style={{
                   left: `${(line.x / FRAME_W) * 100}%`,
@@ -125,7 +121,10 @@ export function ComingSoon() {
               <span
                 key={`${marker.x}-${marker.y}`}
                 className="absolute animate-pop-in border-2 border-primary motion-reduce:animate-none"
-                style={{ ...place(marker.x, marker.y, 9, 9), animationDelay: `${200 + i * 40}ms` }}
+                style={{
+                  ...place(marker.x, marker.y, 9, 9),
+                  animationDelay: `${200 + i * 40}ms`,
+                }}
               >
                 <span
                   className="absolute inset-0 animate-status-light bg-primary opacity-0 motion-reduce:hidden"
