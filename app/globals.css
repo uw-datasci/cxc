@@ -71,6 +71,74 @@
     --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Motion — always pair with `motion-reduce:` (see design-system.md §4.1) */
+@theme {
+    --animate-reticle-spin: reticle-spin 90s linear infinite;
+    --animate-sweep: reticle-spin 8s linear infinite;
+    --animate-ping-ring: ping-ring 4s cubic-bezier(0, 0, 0.2, 1) infinite;
+    --animate-status-light: status-light 14s linear infinite both;
+    --animate-boot-fade: boot-fade 700ms cubic-bezier(0.2, 0, 0, 1) both;
+    --animate-pop-in: pop-in 250ms cubic-bezier(0.2, 0, 0, 1) both;
+    --animate-draw-x: draw-x 400ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    --animate-draw-y: draw-y 400ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    --animate-redact: redact 500ms cubic-bezier(0.4, 0, 0.2, 1) both;
+
+    @keyframes reticle-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @keyframes ping-ring {
+        from {
+            transform: scale(0.15);
+            opacity: 1;
+        }
+        to {
+            transform: scale(1);
+            opacity: 0;
+        }
+    }
+    /* Lit for ~4% of the cycle; staggered delays keep one light on at a time. */
+    @keyframes status-light {
+        0%,
+        4.5%,
+        100% {
+            opacity: 0;
+        }
+        0.5%,
+        4% {
+            opacity: 1;
+        }
+    }
+    @keyframes boot-fade {
+        from {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+    }
+    @keyframes pop-in {
+        from {
+            opacity: 0;
+            transform: scale(0.6);
+        }
+    }
+    @keyframes draw-x {
+        from {
+            transform: scaleX(0);
+        }
+    }
+    @keyframes draw-y {
+        from {
+            transform: scaleY(0);
+        }
+    }
+    @keyframes redact {
+        to {
+            transform: scaleX(0);
+        }
+    }
+}
+
 :root {
     /* Brand palette — names match the Figma variables */
     --smoke: #f7f7f7;

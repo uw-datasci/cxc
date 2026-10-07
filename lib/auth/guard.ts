@@ -4,6 +4,7 @@ import { cache } from "react";
 import { notFound, redirect } from "next/navigation";
 import { RaftResponse, withRaft } from "@uw-datasci/raft";
 
+import { siteConfig } from "@/config/site";
 import { UserService } from "@/server/users/users.service";
 import type { AuthContext } from "@/types/auth";
 import type { Role } from "./roles";
@@ -54,6 +55,7 @@ export const getAuthContext = cache(async (): Promise<AuthContext | null> => {
  * on, in a loop.
  */
 export async function requireUser(): Promise<AuthContext> {
+  if (siteConfig.comingSoon) notFound();
   const ctx = await getAuthContext();
   if (!ctx) redirect(SIGN_IN_PATH);
   if (!ctx.emailVerified) redirect(VERIFY_EMAIL_PATH);
@@ -121,6 +123,8 @@ export function withAuth<TParams extends RouteParams = Record<string, string>>(
   options?: { roles?: readonly Role[]; allowUnverified?: boolean }
 ) {
   return withRaft<RouteContext<TParams>>(async (request, context) => {
+    if (siteConfig.comingSoon) return RaftResponse.notFound();
+
     const ctx = await getAuthContext();
 
     if (!ctx) return RaftResponse.unauthorized();

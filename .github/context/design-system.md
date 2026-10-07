@@ -161,6 +161,18 @@ Avoid arbitrary `text-[17px]` values.
 - **Spacing:** Tailwind's default spacing scale. Layouts are airy, with generous section
   padding (`py-24` and up between landing-page sections) and tight, grid-aligned content.
 
+### 4.1 Motion
+
+- Use the `animate-*` tokens defined in the motion `@theme` block of `globals.css`
+  (`animate-pop-in`, `animate-draw-x`, `animate-reticle-spin`, …). Add new keyframes there,
+  not inline in components.
+- **Every animation is paired with `motion-reduce:`** — usually `motion-reduce:animate-none`,
+  or `motion-reduce:hidden` for purely decorative moving parts. JS-driven motion checks
+  `prefers-reduced-motion` and stays still.
+- Motion is mechanical and quiet, like instruments: linear spins, short ease-out entrances,
+  hairlines drawing from their markers. No bounce, elastic, or springy easing, and nothing
+  that loops fast enough to pull focus from the content.
+
 ---
 
 ## 5. Components and icons

@@ -35,7 +35,7 @@ This repository uses Next.js 16 with the App Router, shadcn/ui, Tailwind CSS v4,
 9. **Mono labels:** `font-mono uppercase tracking-widest`. **Section titles:** `font-bold uppercase`.
 10. **Header scale:** `text-header-main` 36 / `text-header-sub` 20 / `text-header-small` 18 / `text-header-tiny` 16. `h1`–`h4` apply these by default, so use semantic heading tags.
 11. **Square corners** (`--radius: 0`). No `rounded-full` or arbitrary radii except true circles.
-12. **Borders, not shadows.** `shadow-xs` at most.
+12. **Borders, not shadows.** `shadow-xs` at most. **Motion** uses the `animate-*` tokens in `globals.css` and always pairs with `motion-reduce:` (guide §4.1).
 13. **Reuse `@/components/ui`** (Button, Card, Input, Label) before writing markup. Add primitives with `pnpm ui:add <name>`.
 14. **Icons are Phosphor:** `@phosphor-icons/react`, with `/dist/ssr` in server components, and the `*Icon` names. Not Lucide.
 15. **Merge classes with `cn()`** from `@/lib/utils`. Never import fonts outside `app/layout.tsx`.
@@ -80,6 +80,7 @@ This repository uses Next.js 16 with the App Router, shadcn/ui, Tailwind CSS v4,
 10. **Server Components and Actions:** `requireUser()` or `requireRole("organizer")`, then a service. Client components call `app/api` routes through fetchers in `lib/api/`.
 11. **Every new table enables RLS and defines its policies in the same migration** (`pnpm migrate:create <name>`). New tables default to full DML for `app_public`.
 12. **Privileged writes** use a `SECURITY DEFINER` function (model: `grant_user_role()`), never `adminSql`.
+13. **Pre-launch lockdown:** while `siteConfig.comingSoon` (`config/site.ts`) is `true`, only `/` is served. `proxy.ts`, `withAuth`, `requireUser`, the `(auth)` layout, and the auth handler all enforce it; new public pages and `withRaft` routes must check it too (guide §4.1).
 
 ## File Organization
 
