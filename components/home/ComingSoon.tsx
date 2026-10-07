@@ -67,11 +67,11 @@ export function ComingSoon() {
       <main className="relative isolate min-h-svh overflow-hidden">
         <div
           aria-hidden
-          className="[container-type:size] pointer-events-none absolute inset-0 overflow-hidden"
+          className="@container-size pointer-events-none absolute inset-0 overflow-hidden"
         >
           {/* Covers the viewport like object-fit: cover. Narrow screens crop toward the right
               (x 90%) so the target-lock reticle stays in view. */}
-          <div className="absolute top-1/2 left-[calc((100cqw-var(--stage-w))*0.9)] aspect-[1280/832] w-(--stage-w) -translate-y-1/2 [--stage-w:max(100cqw,calc(100cqh*1280/832))]">
+          <div className="absolute top-1/2 left-[calc((100cqw-var(--stage-w))*0.9)] aspect-1280/832 w-(--stage-w) -translate-y-1/2 [--stage-w:max(100cqw,calc(100cqh*1280/832))]">
             <div
               className="absolute animate-boot-fade motion-reduce:animate-none"
               style={{ ...place(64, -17, 514, 514), animationDelay: "100ms" }}
@@ -168,7 +168,7 @@ export function ComingSoon() {
               width={343}
               height={100}
               loading="eager"
-              className="h-auto w-60 md:w-[343px]"
+              className="h-auto w-60 md:w-85.75"
             />
             <span className="sr-only"> — UWaterloo Data Science Club AI datathon</span>
           </h1>
