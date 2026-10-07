@@ -27,6 +27,16 @@ export function DossierPanel() {
         <span aria-hidden className="size-2 shrink-0 border-2 border-primary" />
         Details will be declassified shortly
       </p>
+
+      <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border pt-4 font-mono text-sm tracking-widest">
+        <span className="uppercase">Interested in sponsoring? Contact</span>
+        <a
+          href="mailto:outreach@uwdatascience.ca"
+          className="font-bold underline decoration-primary decoration-2 underline-offset-4 outline-none hover:text-primary focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          outreach@uwdatascience.ca
+        </a>
+      </p>
     </section>
   );
 }

@@ -136,13 +136,14 @@ export function ComingSoon() {
         </div>
 
         <div className="relative z-10 flex min-h-svh flex-col items-center gap-22 px-4 pt-32 pb-24">
-          <Image
-            src="/home/dsc-logo.svg"
-            alt="UW Data Science Club"
-            width={55}
-            height={52}
-            className="absolute top-6 left-6"
-          />
+          <a
+            href="https://uwdatascience.ca"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute top-6 left-6 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <Image src="/home/dsc-logo.svg" alt="UW Data Science Club" width={55} height={52} />
+          </a>
 
           <h1>
             <Image
