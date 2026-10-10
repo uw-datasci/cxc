@@ -387,6 +387,25 @@ export async function fetchMyApplication(): Promise<Application | null> {
 - **Organizer reads across users** belong in RLS (`OR (SELECT app_current_role()) =
   'organizer'`), not in the app layer.
 
+### 4.1 Pre-launch lockdown
+
+`siteConfig.comingSoon` in `config/site.ts` is a plain constant, not an env var. While it
+is `true`, only the coming-soon page (`/`) is reachable:
+
+| Layer | Behaviour while locked |
+| --- | --- |
+| `proxy.ts` (primary) | Pages redirect to `/`; anything under `/api` returns 404 |
+| `withAuth` | Every guarded route returns 404 before resolving the caller |
+| `requireUser()` / `requireRole()` | `notFound()` — covers Server Components and Server Actions |
+| `app/(auth)/layout.tsx` | `notFound()` for every auth page |
+| `app/api/auth/[...path]` | The Neon Auth handler returns 404 |
+
+New public pages or `withRaft` routes are not covered by the guard helpers, so check
+`siteConfig.comingSoon` in them too if they must stay dark. The proxy matcher excludes
+`_next/`, `favicon.ico`, and `home/` (static landing-page assets); don't widen it to "any
+path with an extension", or a dynamic route like `/api/auth/[...path]` becomes reachable as
+`/api/auth/x.json`.
+
 ---
 
 ## 5. Self-check before you finish

@@ -55,7 +55,8 @@ system node `1256:24247`, reference page node `1169:14700`.
     `text-header-tiny` 16. `h1`–`h4` apply these by default, so use semantic heading tags.
 11. **Square corners** (`--radius: 0`). No `rounded-full` or arbitrary radii except true
     circles.
-12. **Borders, not shadows.** `shadow-xs` at most.
+12. **Borders, not shadows.** `shadow-xs` at most. **Motion** uses the `animate-*` tokens in
+    `globals.css` and always pairs with `motion-reduce:` (guide §4.1).
 13. **Reuse `@/components/ui`** (Button, Card, Input, Label) before writing markup. Add
     primitives with `pnpm ui:add <name>`.
 14. **Icons are Phosphor:** `@phosphor-icons/react`, with `/dist/ssr` in server components,
