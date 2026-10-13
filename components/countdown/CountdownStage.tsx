@@ -91,7 +91,5 @@ export function StageLayer({
 
 /** The page shell: a full-viewport, clipped, grey canvas for the layers. */
 export function CountdownStage({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="relative h-svh w-full overflow-hidden bg-background">{children}</div>
-  );
+  return <div className="relative h-svh w-full overflow-hidden bg-background">{children}</div>;
 }

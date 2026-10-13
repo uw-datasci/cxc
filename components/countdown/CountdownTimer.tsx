@@ -6,7 +6,7 @@ import { CaretDownIcon } from "@phosphor-icons/react";
 import { formatUnit, getTimeRemaining } from "@/lib/countdown";
 import { cn } from "@/lib/utils";
 
-const UNITS = ["Days", "Hours", "Minutes", "Seconds"] as const;
+const UNITS = ["DAYS", "HOURS", "MINUTES", "SECONDS"] as const;
 
 /** Shown before the first client snapshot, so server and client markup match. */
 const PLACEHOLDER = "--";
@@ -103,10 +103,7 @@ export function CountdownTimer({
 function CountdownUnit({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col items-center" style={{ width: 173, gap: 10 }}>
-      <div
-        className="flex w-full items-center justify-center border border-border bg-card"
-        style={{ height: 224 }}
-      >
+      <div className="flex w-full items-center justify-center bg-card" style={{ height: 224 }}>
         {/*
           Figma: Alte Haas Grotesk Bold at 100px. `text-8xl` (96px) is the
           closest step on the scale; the guide caps hero numerals there rather
@@ -126,12 +123,11 @@ function CountdownUnit({ label, value }: { label: string; value: string }) {
         </span>
       </div>
 
-      {/* 8 x 16 triangle rotated 90deg, in white — it reads against the artwork. */}
-      <CaretDownIcon aria-hidden weight="fill" className="h-2 w-4 text-card" />
+      <CaretDownIcon aria-hidden weight="fill" className="h-6 w-6 text-card" />
 
       {/* Figma: Atkinson Hyperlegible Bold 18px, no extra tracking, DARK GREY. */}
       <div
-        className="flex w-full items-center justify-center border border-border bg-card font-mono text-lg font-bold text-dark-grey"
+        className="flex w-full items-center justify-center border-none bg-card font-mono text-lg font-bold text-dark-grey"
         style={{ height: 33 }}
       >
         [{label}]

@@ -27,12 +27,48 @@ export function CountdownBackdrop() {
           */}
           <g fill="none" strokeWidth="1.46" opacity="0.3">
             <circle className="text-border" stroke="currentColor" cx="321" cy="240" r="257" />
-            <circle className="text-foreground" stroke="currentColor" cx="320" cy="245.04" r="239.87" />
-            <circle className="text-dark-grey" stroke="currentColor" cx="323.02" cy="242.02" r="222.74" />
-            <circle className="text-card" stroke="currentColor" cx="318.98" cy="246.05" r="172.34" />
-            <circle className="text-border" stroke="currentColor" cx="318.99" cy="246.05" r="156.22" />
-            <circle className="text-border" stroke="currentColor" cx="319.99" cy="245.04" r="60.47" />
-            <circle className="text-dark-grey" stroke="currentColor" cx="319.99" cy="245.04" r="38.3" />
+            <circle
+              className="text-foreground"
+              stroke="currentColor"
+              cx="320"
+              cy="245.04"
+              r="239.87"
+            />
+            <circle
+              className="text-dark-grey"
+              stroke="currentColor"
+              cx="323.02"
+              cy="242.02"
+              r="222.74"
+            />
+            <circle
+              className="text-card"
+              stroke="currentColor"
+              cx="318.98"
+              cy="246.05"
+              r="172.34"
+            />
+            <circle
+              className="text-border"
+              stroke="currentColor"
+              cx="318.99"
+              cy="246.05"
+              r="156.22"
+            />
+            <circle
+              className="text-border"
+              stroke="currentColor"
+              cx="319.99"
+              cy="245.04"
+              r="60.47"
+            />
+            <circle
+              className="text-dark-grey"
+              stroke="currentColor"
+              cx="319.99"
+              cy="245.04"
+              r="38.3"
+            />
           </g>
         </Canvas>
       </StageLayer>
@@ -75,12 +111,48 @@ export function CountdownBackdrop() {
           {/* Right ring group: 372 x 372 at (963, 412), 42% opacity. */}
           <g fill="none" strokeWidth="1.46" opacity="0.42">
             <circle className="text-border" stroke="currentColor" cx="1149" cy="598" r="186" />
-            <circle className="text-dark-grey" stroke="currentColor" cx="1150.46" cy="599.46" r="161.2" />
-            <circle className="text-foreground" stroke="currentColor" cx="1148.27" cy="601.65" r="173.6" />
-            <circle className="text-card" stroke="currentColor" cx="1147.54" cy="602.38" r="124.73" />
-            <circle className="text-border" stroke="currentColor" cx="1147.54" cy="602.38" r="113.06" />
-            <circle className="text-border" stroke="currentColor" cx="1148.28" cy="601.65" r="43.77" />
-            <circle className="text-dark-grey" stroke="currentColor" cx="1148.27" cy="601.65" r="27.72" />
+            <circle
+              className="text-dark-grey"
+              stroke="currentColor"
+              cx="1150.46"
+              cy="599.46"
+              r="161.2"
+            />
+            <circle
+              className="text-foreground"
+              stroke="currentColor"
+              cx="1148.27"
+              cy="601.65"
+              r="173.6"
+            />
+            <circle
+              className="text-card"
+              stroke="currentColor"
+              cx="1147.54"
+              cy="602.38"
+              r="124.73"
+            />
+            <circle
+              className="text-border"
+              stroke="currentColor"
+              cx="1147.54"
+              cy="602.38"
+              r="113.06"
+            />
+            <circle
+              className="text-border"
+              stroke="currentColor"
+              cx="1148.28"
+              cy="601.65"
+              r="43.77"
+            />
+            <circle
+              className="text-dark-grey"
+              stroke="currentColor"
+              cx="1148.27"
+              cy="601.65"
+              r="27.72"
+            />
           </g>
 
           {/* Hairline rules, by Figma layer name. */}

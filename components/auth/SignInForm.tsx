@@ -72,7 +72,7 @@ export function SignInForm({ redirectTo = "/" }: Readonly<{ redirectTo?: string 
             <Label htmlFor="password">Password</Label>
             <Link
               href="/forgot-password"
-              className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-4"
+              className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
             >
               Forgot password?
             </Link>
@@ -88,7 +88,7 @@ export function SignInForm({ redirectTo = "/" }: Readonly<{ redirectTo?: string 
         </div>
 
         {error ? (
-          <p role="alert" className="text-destructive text-sm">
+          <p role="alert" className="text-sm text-destructive">
             {error}
           </p>
         ) : null}
@@ -99,14 +99,14 @@ export function SignInForm({ redirectTo = "/" }: Readonly<{ redirectTo?: string 
       </form>
 
       <div className="flex items-center gap-3">
-        <span className="bg-border h-px flex-1" />
-        <span className="text-muted-foreground text-xs uppercase">or</span>
-        <span className="bg-border h-px flex-1" />
+        <span className="h-px flex-1 bg-border" />
+        <span className="text-xs text-muted-foreground uppercase">or</span>
+        <span className="h-px flex-1 bg-border" />
       </div>
 
       <SocialButtons callbackURL={redirectTo} disabled={pending} />
 
-      <p className="text-muted-foreground text-center text-sm">
+      <p className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}
         <Link href="/sign-up" className="text-foreground underline underline-offset-4">
           Sign up

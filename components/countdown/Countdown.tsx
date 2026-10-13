@@ -2,12 +2,12 @@ import { CaretRightIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { CxcWordmark } from "@/components/brand/CxcWordmark";
 import { UwDscMark } from "@/components/brand/UwDscMark";
-import { Button } from "@/components/ui/button";
 import { CXC_START } from "@/lib/countdown";
 
 import { CountdownBackdrop } from "./CountdownBackdrop";
 import { CountdownStage, StageLayer } from "./CountdownStage";
 import { CountdownTimer } from "./CountdownTimer";
+import { WaitlistModal } from "./WaitlistModal";
 
 /**
  * The pre-launch landing page: a 1:1 reproduction of the Figma `Countdown`
@@ -36,25 +36,20 @@ export function Countdown() {
         <CxcWordmark className="absolute" style={{ left: 469, top: 129, width: 343 }} />
 
         {/* `Frame 90`: 932 x 285 at (174, 319). */}
-        <CountdownTimer target={CXC_START} className="absolute" style={{ left: 174, top: 319 }} />
+        <CountdownTimer
+          target={CXC_START}
+          className="absolute"
+          style={{ left: 174, top: 319 }}
+        />
 
-        {/* `Frame 50`: 248 x 43 at (25, 732) — 8px arrow, 15px gap, 225px button. */}
-        <footer className="absolute flex items-center" style={{ left: 25, top: 732, gap: 15 }}>
-          <CaretRightIcon aria-hidden weight="fill" className="h-4 w-2 shrink-0 text-primary" />
-          {/*
-            Inert by design, pending a decision on where signups go: a `waitlist`
-            domain (migration + service + POST /api/waitlist), the existing
-            /sign-up flow, or an external form. Styled as the live CTA rather
-            than `disabled` so it matches the mockup instead of washing out.
-          */}
-          <Button
-            type="button"
-            aria-disabled="true"
-            className="text-lg font-normal uppercase"
-            style={{ width: 225, height: 43 }}
-          >
-            Join waiting list
-          </Button>
+        {/* `Frame 50`: 233 x 43 at (25, 732) — 8px arrow and 225px button. */}
+        <footer className="absolute flex items-center gap-2" style={{ left: 25, top: 732 }}>
+          <CaretRightIcon
+            aria-hidden
+            weight="fill"
+            className="ml-[-3%] h-5 w-5 shrink-0 text-primary"
+          />
+          <WaitlistModal />
         </footer>
       </StageLayer>
     </CountdownStage>
