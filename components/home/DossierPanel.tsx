@@ -1,3 +1,5 @@
+import { ScrambleText } from "@/components/home/ScrambleText";
+
 /** "Coming soon" card that replaces the Figma countdown, styled as a classified file. */
 export function DossierPanel() {
   return (
@@ -14,7 +16,10 @@ export function DossierPanel() {
         id="coming-soon-heading"
         className="relative mx-auto my-8 w-fit text-center text-5xl leading-none font-bold text-primary uppercase sm:text-6xl md:my-10 md:text-8xl"
       >
-        Coming soon
+        <span className="sr-only">Coming soon</span>
+        <span aria-hidden>
+          <ScrambleText text="Coming soon" />
+        </span>
         {/* Redaction bar that wipes away once the HUD has booted. */}
         <span
           aria-hidden
