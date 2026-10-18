@@ -56,8 +56,8 @@ export type ReticleVariant = keyof typeof geometry;
 const STROKE = 1.45882;
 
 /** One full radar revolution, and when the first one starts (after the HUD boot-in). */
-export const RADAR_SWEEP_MS = 6000;
-export const RADAR_START_MS = 1000;
+const RADAR_SWEEP_MS = 6000;
+const RADAR_START_MS = 1000;
 
 const CARDINALS = [
   { label: "N", dx: 0, dy: -1 },
@@ -238,7 +238,6 @@ export function RadarSweep({ className }: Readonly<{ className?: string }>) {
       className={cn("block size-full overflow-visible", className)}
     >
       <g
-        data-radar-sweep
         className="animate-radar-sweep motion-reduce:hidden"
         style={{ ...pivotAt(center), animationDelay: `${RADAR_START_MS}ms` }}
       >

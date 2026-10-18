@@ -2,7 +2,6 @@ import Image from "next/image";
 import type { CSSProperties } from "react";
 
 import { DossierPanel } from "@/components/home/DossierPanel";
-import { RadarReadout } from "@/components/home/RadarReadout";
 import { CompassNeedle, RadarSweep, Reticle } from "@/components/home/Reticle";
 import { cn } from "@/lib/utils";
 
@@ -173,8 +172,6 @@ export function ComingSoon() {
           </h1>
 
           <DossierPanel />
-
-          <RadarReadout className="absolute right-6 bottom-6" />
         </div>
       </main>
     </>

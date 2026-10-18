@@ -81,7 +81,6 @@
   --animate-pop-in: pop-in 250ms cubic-bezier(0.2, 0, 0, 1) both;
   --animate-draw-x: draw-x 400ms cubic-bezier(0.4, 0, 0.2, 1) both;
   --animate-draw-y: draw-y 400ms cubic-bezier(0.4, 0, 0.2, 1) both;
-  --animate-redact: redact 500ms cubic-bezier(0.4, 0, 0.2, 1) both;
 
   /* Swing, damp out, hold on north; get nudged, settle on a new heading; drift back. */
   @keyframes compass-needle {
@@ -170,11 +169,6 @@
   @keyframes draw-y {
     from {
       transform: scaleY(0);
-    }
-  }
-  @keyframes redact {
-    to {
-      transform: scaleX(0);
     }
   }
 }
