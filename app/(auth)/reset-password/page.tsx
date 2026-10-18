@@ -2,7 +2,13 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export const metadata: Metadata = { title: "Reset password" };
 
@@ -21,8 +27,8 @@ export default async function ResetPasswordPage({
       <CardHeader>
         <CardTitle>Set a new password</CardTitle>
         <CardDescription>
-          We sent a 6-digit code to <span className="text-foreground">{address}</span>. It expires
-          in 5 minutes. Enter it along with your new password.
+          We sent a 6-digit code to <span className="text-foreground">{address}</span>. It
+          expires in 5 minutes. Enter it along with your new password.
         </CardDescription>
       </CardHeader>
       <CardContent>

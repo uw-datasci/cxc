@@ -49,3 +49,7 @@ Also see `server/README.md` (folder spec, RLS rationale) and
     (`pnpm migrate:create <name>`). New tables default to full DML for `app_public`.
 12. **Privileged writes** use a `SECURITY DEFINER` function (model: `grant_user_role()`),
     never `adminSql`.
+13. **Pre-launch lockdown:** while `siteConfig.comingSoon` (`config/site.ts`) is `true`, only
+    `/` is served. `proxy.ts`, `withAuth`, `requireUser`, the `(auth)` layout, and the auth
+    handler all enforce it; new public pages and `withRaft` routes must check it too
+    (guide §4.1).

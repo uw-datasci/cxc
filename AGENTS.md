@@ -43,7 +43,8 @@ It is the canonical guide to the CxC design system. The values live in `app/glob
     `text-header-tiny` 16. `h1`–`h4` apply these by default, so use semantic heading tags.
 11. **Square corners** (`--radius: 0`). No `rounded-full` or arbitrary radii except true
     circles.
-12. **Borders, not shadows.** `shadow-xs` at most.
+12. **Borders, not shadows.** `shadow-xs` at most. **Motion** uses the `animate-*` tokens in
+    `globals.css` and always pairs with `motion-reduce:` (guide §4.1).
 13. **Reuse `@/components/ui`** (Button, Card, Input, Label) before writing markup. Add
     primitives with `pnpm ui:add <name>`.
 14. **Icons are Phosphor:** `@phosphor-icons/react`, with `/dist/ssr` in server components,
@@ -95,6 +96,10 @@ It walks through adding a domain end to end. The `users` domain (`server/users/`
     (`pnpm migrate:create <name>`). New tables default to full DML for `app_public`.
 12. **Privileged writes** use a `SECURITY DEFINER` function (model: `grant_user_role()`),
     never `adminSql`.
+13. **Pre-launch lockdown:** while `siteConfig.comingSoon` (`config/site.ts`) is `true`, only
+    `/` is served. `proxy.ts`, `withAuth`, `requireUser`, the `(auth)` layout, and the auth
+    handler all enforce it; new public pages and `withRaft` routes must check it too
+    (guide §4.1).
 
 Run the self-check at the end of the server guide (§5) before finishing any server task.
 

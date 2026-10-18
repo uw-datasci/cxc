@@ -127,13 +127,13 @@ export function VerifyEmailForm({
         </div>
 
         {error ? (
-          <p role="alert" className="text-destructive text-sm">
+          <p role="alert" className="text-sm text-destructive">
             {error}
           </p>
         ) : null}
 
         {notice ? (
-          <p role="status" className="text-muted-foreground text-sm">
+          <p role="status" className="text-sm text-muted-foreground">
             {notice}
           </p>
         ) : null}
@@ -161,7 +161,7 @@ export function VerifyEmailForm({
           type="button"
           onClick={onUseAnotherEmail}
           disabled={pending}
-          className="text-muted-foreground hover:text-foreground underline underline-offset-4"
+          className="text-muted-foreground underline underline-offset-4 hover:text-foreground"
         >
           Use a different email
         </button>
