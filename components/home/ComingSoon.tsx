@@ -2,8 +2,8 @@ import Image from "next/image";
 import type { CSSProperties } from "react";
 
 import { DossierPanel } from "@/components/home/DossierPanel";
-import { CompassNeedle, Reticle } from "@/components/home/Reticle";
-import { TargetLockProvider, TargetReadout, TargetReticle } from "@/components/home/TargetLock";
+import { RadarReadout } from "@/components/home/RadarReadout";
+import { CompassNeedle, RadarSweep, Reticle } from "@/components/home/Reticle";
 import { cn } from "@/lib/utils";
 
 // Decor is laid out in the coordinates of the Figma frame (1169:24809), then scaled to cover
@@ -63,14 +63,14 @@ const originClass = {
 
 export function ComingSoon() {
   return (
-    <TargetLockProvider>
+    <>
       <main className="relative isolate min-h-svh overflow-hidden">
         <div
           aria-hidden
           className="@container-size pointer-events-none absolute inset-0 overflow-hidden"
         >
           {/* Covers the viewport like object-fit: cover. Narrow screens crop toward the right
-              (x 90%) so the target-lock reticle stays in view. */}
+              (x 90%) so the radar reticle stays in view. */}
           <div className="absolute top-1/2 left-[calc((100cqw-var(--stage-w))*0.9)] aspect-1280/832 w-(--stage-w) -translate-y-1/2 [--stage-w:max(100cqw,calc(100cqh*1280/832))]">
             <div
               className="absolute animate-boot-fade motion-reduce:animate-none"
@@ -102,9 +102,8 @@ export function ComingSoon() {
               className="absolute animate-boot-fade motion-reduce:animate-none"
               style={{ ...place(963, 412, 372, 372), animationDelay: "250ms" }}
             >
-              <TargetReticle>
-                <Reticle variant="target" />
-              </TargetReticle>
+              <Reticle variant="radar" />
+              <RadarSweep className="absolute inset-0" />
             </div>
 
             {LINES.map((line, i) => (
@@ -175,9 +174,9 @@ export function ComingSoon() {
 
           <DossierPanel />
 
-          <TargetReadout className="absolute right-6 bottom-6" />
+          <RadarReadout className="absolute right-6 bottom-6" />
         </div>
       </main>
-    </TargetLockProvider>
+    </>
   );
 }

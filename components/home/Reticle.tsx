@@ -36,7 +36,7 @@ const geometry = {
       { cx: 255.992, cy: 262.039, r: 239.137, tone: "foreground" },
     ],
   },
-  target: {
+  radar: {
     size: 372,
     center: { x: 185.271, y: 189.647 },
     rings: [
@@ -55,11 +55,9 @@ export type ReticleVariant = keyof typeof geometry;
 
 const STROKE = 1.45882;
 
-/** Where the `target` reticle's lock brackets should centre, as % of its box. */
-export const targetCenter = {
-  x: (geometry.target.center.x / geometry.target.size) * 100,
-  y: (geometry.target.center.y / geometry.target.size) * 100,
-};
+/** One full radar revolution, and when the first one starts (after the HUD boot-in). */
+export const RADAR_SWEEP_MS = 6000;
+export const RADAR_START_MS = 1000;
 
 const CARDINALS = [
   { label: "N", dx: 0, dy: -1 },
@@ -77,7 +75,7 @@ function pivotAt({ x, y }: { x: number; y: number }): CSSProperties {
  * Concentric-circle reticle from the Figma landing page.
  * - `compass`: a fixed compass dial (degree ticks and N/E/S/W). Its needle is the separate
  *   {@link CompassNeedle}, so it can sit above the terrain while the rings stay below.
- * - `target`: a sonar ping; drift and lock-on live in `TargetLock`.
+ * - `radar`: static range rings; the sweep and contacts are the separate {@link RadarSweep}.
  */
 export function Reticle({
   variant,
@@ -148,17 +146,6 @@ export function Reticle({
           ))}
         </>
       )}
-
-      {variant === "target" && (
-        <circle
-          cx={center.x}
-          cy={center.y}
-          r={172.871}
-          strokeWidth={STROKE * 1.5}
-          className="animate-ping-ring stroke-foreground motion-reduce:hidden"
-          style={pivotAt(center)}
-        />
-      )}
     </svg>
   );
 }
@@ -202,6 +189,91 @@ export function CompassNeedle({ className }: Readonly<{ className?: string }>) {
           <circle cx={x} cy={y} r={6} className="fill-card stroke-foreground" />
         </g>
       </CompassLean>
+    </svg>
+  );
+}
+
+const RADAR_RANGE = 172.871;
+const TRAIL_STEPS = 8;
+const TRAIL_STEP_DEG = 5;
+
+// Contacts as bearing (degrees clockwise from north) and range (viewBox units).
+const CONTACTS = [
+  { bearing: 52, range: 98 },
+  { bearing: 138, range: 146 },
+  { bearing: 221, range: 66 },
+  { bearing: 304, range: 124 },
+];
+
+/** Point at a compass bearing and distance from the radar centre, in viewBox units. */
+function polar(bearing: number, range: number) {
+  const { x, y } = geometry.radar.center;
+  const rad = (bearing * Math.PI) / 180;
+  return { x: x + range * Math.sin(rad), y: y - range * Math.cos(rad) };
+}
+
+function wedge(from: number, to: number) {
+  const { x, y } = geometry.radar.center;
+  const a = polar(from, RADAR_RANGE);
+  const b = polar(to, RADAR_RANGE);
+  return `M${x} ${y}L${a.x} ${a.y}A${RADAR_RANGE} ${RADAR_RANGE} 0 0 1 ${b.x} ${b.y}Z`;
+}
+
+/**
+ * The radar reticle's sweep: a line circling the range rings with a stepped afterglow
+ * behind it (no gradients), and contacts that flare as it passes, then fade. Contact
+ * delays are offset by their bearing so each flare lands exactly under the sweep.
+ * Rendered in the same box as `<Reticle variant="radar" />`. With reduced motion the sweep
+ * is hidden and the contacts hold at a steady, dim opacity.
+ */
+export function RadarSweep({ className }: Readonly<{ className?: string }>) {
+  const { size, center } = geometry.radar;
+  const tip = polar(0, RADAR_RANGE);
+
+  return (
+    <svg
+      aria-hidden
+      viewBox={`0 0 ${size} ${size}`}
+      fill="none"
+      className={cn("block size-full overflow-visible", className)}
+    >
+      <g
+        data-radar-sweep
+        className="animate-radar-sweep motion-reduce:hidden"
+        style={{ ...pivotAt(center), animationDelay: `${RADAR_START_MS}ms` }}
+      >
+        {Array.from({ length: TRAIL_STEPS }, (_, i) => (
+          <path
+            key={i}
+            d={wedge(-(i + 1) * TRAIL_STEP_DEG, -i * TRAIL_STEP_DEG)}
+            className="fill-primary"
+            style={{ opacity: 0.2 * (1 - i / TRAIL_STEPS) }}
+          />
+        ))}
+        <line
+          x1={center.x}
+          y1={center.y}
+          x2={tip.x}
+          y2={tip.y}
+          strokeWidth={1.5}
+          className="stroke-primary"
+        />
+      </g>
+
+      {CONTACTS.map(({ bearing, range }) => {
+        const { x, y } = polar(bearing, range);
+        return (
+          <rect
+            key={bearing}
+            x={x - 3.5}
+            y={y - 3.5}
+            width={7}
+            height={7}
+            className="animate-radar-contact fill-primary opacity-10 motion-reduce:animate-none motion-reduce:opacity-60"
+            style={{ animationDelay: `${RADAR_START_MS + (bearing / 360) * RADAR_SWEEP_MS}ms` }}
+          />
+        );
+      })}
     </svg>
   );
 }

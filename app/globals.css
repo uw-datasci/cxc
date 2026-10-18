@@ -5,244 +5,251 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: var(--font-sans);
-    --font-sans: var(--font-sans);
-    --font-mono: var(--font-mono);
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 
-    /* Header scale (Figma: Main 36 / Sub 20 / Small 18 / Tiny 16) */
-    --text-header-main: 2.25rem;
-    --text-header-main--line-height: normal;
-    --text-header-sub: 1.25rem;
-    --text-header-sub--line-height: normal;
-    --text-header-small: 1.125rem;
-    --text-header-small--line-height: normal;
-    --text-header-tiny: 1rem;
-    --text-header-tiny--line-height: normal;
+  /* Header scale (Figma: Main 36 / Sub 20 / Small 18 / Tiny 16) */
+  --text-header-main: 2.25rem;
+  --text-header-main--line-height: normal;
+  --text-header-sub: 1.25rem;
+  --text-header-sub--line-height: normal;
+  --text-header-small: 1.125rem;
+  --text-header-small--line-height: normal;
+  --text-header-tiny: 1rem;
+  --text-header-tiny--line-height: normal;
 
-    /* Brand palette */
-    --color-smoke: var(--smoke);
-    --color-grey: var(--grey);
-    --color-semi-grey: var(--semi-grey);
-    --color-grid-grey: var(--grid-grey);
-    --color-mid-grey: var(--mid-grey);
-    --color-dark-grey: var(--dark-grey);
-    --color-black: var(--black);
-    --color-blue: var(--blue);
-    --color-dark-blue: var(--dark-blue);
-    --color-navy: var(--navy);
+  /* Brand palette */
+  --color-smoke: var(--smoke);
+  --color-grey: var(--grey);
+  --color-semi-grey: var(--semi-grey);
+  --color-grid-grey: var(--grid-grey);
+  --color-mid-grey: var(--mid-grey);
+  --color-dark-grey: var(--dark-grey);
+  --color-black: var(--black);
+  --color-blue: var(--blue);
+  --color-dark-blue: var(--dark-blue);
+  --color-navy: var(--navy);
 
-    --color-sidebar-ring: var(--sidebar-ring);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar: var(--sidebar);
-    --color-chart-5: var(--chart-5);
-    --color-chart-4: var(--chart-4);
-    --color-chart-3: var(--chart-3);
-    --color-chart-2: var(--chart-2);
-    --color-chart-1: var(--chart-1);
-    --color-ring: var(--ring);
-    --color-input: var(--input);
-    --color-border: var(--border);
-    --color-destructive: var(--destructive);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-accent: var(--accent);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-muted: var(--muted);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-secondary: var(--secondary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-primary: var(--primary);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-popover: var(--popover);
-    --color-card-foreground: var(--card-foreground);
-    --color-card: var(--card);
-    --color-foreground: var(--foreground);
-    --color-background: var(--background);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 /* Motion — always pair with `motion-reduce:` (see design-system.md §4.1) */
 @theme {
-    --animate-compass-needle: compass-needle 20s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-    --animate-ping-ring: ping-ring 4s cubic-bezier(0, 0, 0.2, 1) infinite;
-    --animate-status-light: status-light 14s linear infinite both;
-    --animate-boot-fade: boot-fade 700ms cubic-bezier(0.2, 0, 0, 1) both;
-    --animate-pop-in: pop-in 250ms cubic-bezier(0.2, 0, 0, 1) both;
-    --animate-draw-x: draw-x 400ms cubic-bezier(0.4, 0, 0.2, 1) both;
-    --animate-draw-y: draw-y 400ms cubic-bezier(0.4, 0, 0.2, 1) both;
-    --animate-redact: redact 500ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  --animate-compass-needle: compass-needle 20s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  --animate-radar-sweep: radar-sweep 6s linear infinite;
+  --animate-radar-contact: radar-contact 6s linear infinite;
+  --animate-status-light: status-light 14s linear infinite both;
+  --animate-boot-fade: boot-fade 700ms cubic-bezier(0.2, 0, 0, 1) both;
+  --animate-pop-in: pop-in 250ms cubic-bezier(0.2, 0, 0, 1) both;
+  --animate-draw-x: draw-x 400ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  --animate-draw-y: draw-y 400ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  --animate-redact: redact 500ms cubic-bezier(0.4, 0, 0.2, 1) both;
 
-    /* Swing, damp out, hold on north; get nudged, settle on a new heading; drift back. */
-    @keyframes compass-needle {
-        0%,
-        100% {
-            transform: rotate(-28deg);
-        }
-        4% {
-            transform: rotate(18deg);
-        }
-        8% {
-            transform: rotate(-10deg);
-        }
-        12% {
-            transform: rotate(5deg);
-        }
-        16% {
-            transform: rotate(-2deg);
-        }
-        20%,
-        48% {
-            transform: rotate(0deg);
-        }
-        52% {
-            transform: rotate(34deg);
-        }
-        56% {
-            transform: rotate(20deg);
-        }
-        60% {
-            transform: rotate(29deg);
-        }
-        64% {
-            transform: rotate(25deg);
-        }
-        68%,
-        92% {
-            transform: rotate(27deg);
-        }
+  /* Swing, damp out, hold on north; get nudged, settle on a new heading; drift back. */
+  @keyframes compass-needle {
+    0%,
+    100% {
+      transform: rotate(-28deg);
     }
-    @keyframes ping-ring {
-        from {
-            transform: scale(0.15);
-            opacity: 1;
-        }
-        to {
-            transform: scale(1);
-            opacity: 0;
-        }
+    4% {
+      transform: rotate(18deg);
     }
-    /* Lit for ~4% of the cycle; staggered delays keep one light on at a time. */
-    @keyframes status-light {
-        0%,
-        4.5%,
-        100% {
-            opacity: 0;
-        }
-        0.5%,
-        4% {
-            opacity: 1;
-        }
+    8% {
+      transform: rotate(-10deg);
     }
-    @keyframes boot-fade {
-        from {
-            opacity: 0;
-            transform: scale(0.96);
-        }
+    12% {
+      transform: rotate(5deg);
     }
-    @keyframes pop-in {
-        from {
-            opacity: 0;
-            transform: scale(0.6);
-        }
+    16% {
+      transform: rotate(-2deg);
     }
-    @keyframes draw-x {
-        from {
-            transform: scaleX(0);
-        }
+    20%,
+    48% {
+      transform: rotate(0deg);
     }
-    @keyframes draw-y {
-        from {
-            transform: scaleY(0);
-        }
+    52% {
+      transform: rotate(34deg);
     }
-    @keyframes redact {
-        to {
-            transform: scaleX(0);
-        }
+    56% {
+      transform: rotate(20deg);
     }
+    60% {
+      transform: rotate(29deg);
+    }
+    64% {
+      transform: rotate(25deg);
+    }
+    68%,
+    92% {
+      transform: rotate(27deg);
+    }
+  }
+  /* Keep RADAR_SWEEP_MS in components/home/Reticle.tsx in step with these durations. */
+  @keyframes radar-sweep {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  /* Flares as the sweep crosses it, then fades back to its resting afterglow. */
+  @keyframes radar-contact {
+    0% {
+      opacity: 1;
+    }
+    70%,
+    100% {
+      opacity: 0.1;
+    }
+  }
+  /* Lit for ~4% of the cycle; staggered delays keep one light on at a time. */
+  @keyframes status-light {
+    0%,
+    4.5%,
+    100% {
+      opacity: 0;
+    }
+    0.5%,
+    4% {
+      opacity: 1;
+    }
+  }
+  @keyframes boot-fade {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+  }
+  @keyframes draw-x {
+    from {
+      transform: scaleX(0);
+    }
+  }
+  @keyframes draw-y {
+    from {
+      transform: scaleY(0);
+    }
+  }
+  @keyframes redact {
+    to {
+      transform: scaleX(0);
+    }
+  }
 }
 
 :root {
-    /* Brand palette — names match the Figma variables */
-    --smoke: #f7f7f7;
-    --grey: #e8e8e8;
-    --semi-grey: #dbdbdb;
-    --grid-grey: #cecece;
-    --mid-grey: #757271;
-    --dark-grey: #333130;
-    --black: #101010;
-    --blue: #1b66ff;
-    --dark-blue: #0e49c0;
-    --navy: #082b71;
+  /* Brand palette — names match the Figma variables */
+  --smoke: #f7f7f7;
+  --grey: #e8e8e8;
+  --semi-grey: #dbdbdb;
+  --grid-grey: #cecece;
+  --mid-grey: #757271;
+  --dark-grey: #333130;
+  --black: #101010;
+  --blue: #1b66ff;
+  --dark-blue: #0e49c0;
+  --navy: #082b71;
 
-    --background: var(--grey);
-    --foreground: var(--black);
-    --card: var(--smoke);
-    --card-foreground: var(--black);
-    --popover: var(--smoke);
-    --popover-foreground: var(--black);
-    --primary: var(--blue);
-    --primary-foreground: var(--smoke);
-    --secondary: var(--semi-grey);
-    --secondary-foreground: var(--black);
-    --muted: var(--semi-grey);
-    --muted-foreground: var(--mid-grey);
-    --accent: var(--semi-grey);
-    --accent-foreground: var(--black);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: var(--grid-grey);
-    --input: var(--grid-grey);
-    --ring: var(--blue);
-    --chart-1: var(--blue);
-    --chart-2: var(--dark-blue);
-    --chart-3: var(--navy);
-    --chart-4: var(--mid-grey);
-    --chart-5: var(--dark-grey);
-    --radius: 0;
-    --sidebar: var(--smoke);
-    --sidebar-foreground: var(--black);
-    --sidebar-primary: var(--blue);
-    --sidebar-primary-foreground: var(--smoke);
-    --sidebar-accent: var(--semi-grey);
-    --sidebar-accent-foreground: var(--black);
-    --sidebar-border: var(--grid-grey);
-    --sidebar-ring: var(--blue);
+  --background: var(--grey);
+  --foreground: var(--black);
+  --card: var(--smoke);
+  --card-foreground: var(--black);
+  --popover: var(--smoke);
+  --popover-foreground: var(--black);
+  --primary: var(--blue);
+  --primary-foreground: var(--smoke);
+  --secondary: var(--semi-grey);
+  --secondary-foreground: var(--black);
+  --muted: var(--semi-grey);
+  --muted-foreground: var(--mid-grey);
+  --accent: var(--semi-grey);
+  --accent-foreground: var(--black);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: var(--grid-grey);
+  --input: var(--grid-grey);
+  --ring: var(--blue);
+  --chart-1: var(--blue);
+  --chart-2: var(--dark-blue);
+  --chart-3: var(--navy);
+  --chart-4: var(--mid-grey);
+  --chart-5: var(--dark-grey);
+  --radius: 0;
+  --sidebar: var(--smoke);
+  --sidebar-foreground: var(--black);
+  --sidebar-primary: var(--blue);
+  --sidebar-primary-foreground: var(--smoke);
+  --sidebar-accent: var(--semi-grey);
+  --sidebar-accent-foreground: var(--black);
+  --sidebar-border: var(--grid-grey);
+  --sidebar-ring: var(--blue);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
+  }
   body {
     @apply bg-background text-foreground;
-    }
+  }
   html {
     @apply font-sans;
-    }
+  }
   h1 {
     @apply font-heading text-header-main;
-    }
+  }
   h2 {
     @apply font-heading text-header-sub;
-    }
+  }
   h3 {
     @apply font-heading text-header-small;
-    }
+  }
   h4 {
     @apply font-heading text-header-tiny;
-    }
+  }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
-    }
+  }
 }
