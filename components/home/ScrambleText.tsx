@@ -157,29 +157,44 @@ export function ScrambleText({
     );
   }
 
+  // Group letters into words so lines wrap only at spaces, never between letters.
+  const words: { start: number; letters: string[] }[] = [];
+  chars.forEach((char, i) => {
+    if (char === " ") return;
+    const last = words.at(-1);
+    if (last && chars[i - 1] !== " ") last.letters.push(char);
+    else words.push({ start: i, letters: [char] });
+  });
+
   return (
     <>
       <span className="sr-only">{text}</span>
       <span aria-hidden>
-        {chars.map((char, i) =>
-          char === " " ? (
-            " "
-          ) : (
-            // Index keys are stable here: the characters never reorder.
-            <span key={i} className="relative inline-block">
-              <span className="invisible motion-reduce:visible">{char}</span>
-              {/* Out of flow and centred on the real letter: wider glyphs overflow, not reflow. */}
-              <span
-                className={cn(
-                  "absolute inset-y-0 left-1/2 -translate-x-1/2 motion-reduce:hidden",
-                  glyphs[i] && "text-foreground"
-                )}
-              >
-                {glyphs[i] ?? char}
-              </span>
+        {words.map(({ start, letters }, w) => (
+          // Index keys are stable here: the words and characters never reorder.
+          <span key={start}>
+            {w > 0 && " "}
+            <span className="whitespace-nowrap">
+              {letters.map((char, offset) => {
+                const i = start + offset;
+                return (
+                  <span key={i} className="relative inline-block">
+                    <span className="invisible motion-reduce:visible">{char}</span>
+                    {/* Out of flow and centred on the real letter: wider glyphs overflow, not reflow. */}
+                    <span
+                      className={cn(
+                        "absolute inset-y-0 left-1/2 -translate-x-1/2 motion-reduce:hidden",
+                        glyphs[i] && "text-foreground"
+                      )}
+                    >
+                      {glyphs[i] ?? char}
+                    </span>
+                  </span>
+                );
+              })}
             </span>
-          )
-        )}
+          </span>
+        ))}
       </span>
     </>
   );
