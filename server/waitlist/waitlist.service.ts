@@ -1,6 +1,7 @@
 import "server-only";
 
 import { WaitlistRepository } from "./waitlist.repository";
+import { sendWaitlistConfirmation } from "./waitlist.mailer";
 
 const MAX_EMAIL_LENGTH = 254;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,6 +22,16 @@ export class WaitlistService {
       return { ok: false, reason: "invalid_email" };
     }
 
-    return { ok: true, isNew: await this.repository.insertIfNew(email) };
+    const isNew = await this.repository.insertIfNew(email);
+
+    if (isNew) {
+      try {
+        await sendWaitlistConfirmation(email);
+      } catch (error) {
+        console.error("Waitlist confirmation email failed.", error);
+      }
+    }
+
+    return { ok: true, isNew };
   }
 }
