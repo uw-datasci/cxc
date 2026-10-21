@@ -12,7 +12,7 @@ export function DossierPanel() {
     >
       <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-sm tracking-widest uppercase">
         <span className="flex items-center gap-3">
-          <ScrambleText text="WINTER 2027" delay={300} duration={350} monospace />
+          <ScrambleText text="FEBRUARY 2027" delay={300} duration={350} monospace />
         </span>
         <span className="border border-foreground px-2 py-0.5 font-bold">
           <ScrambleText text="[Classified]" delay={350} duration={400} monospace />
