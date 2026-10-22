@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CaretRightIcon } from "@phosphor-icons/react";
+import { CaretRightIcon, CheckIcon } from "@phosphor-icons/react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -70,11 +70,24 @@ export function WaitlistModal() {
         </DialogHeader>
 
         {submitted ? (
-          <p role="status" className="font-mono text-sm leading-relaxed">
-            Thanks — you are on the CxC waiting list.
-          </p>
+          <div
+            role="status"
+            aria-live="polite"
+            className="flex flex-col gap-4 bg-dark-grey p-5 text-primary-foreground"
+          >
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between gap-4">
+                <h3 className="text-header-sub font-bold uppercase">You&apos;re on the list</h3>
+                <CheckIcon aria-hidden weight="bold" className="size-6 shrink-0" />
+              </div>
+              <p className="font-mono text-sm leading-relaxed">
+                Thanks for joining the CxC waiting list. You&apos;ll receive a confirmation
+                email shortly.
+              </p>
+            </div>
+          </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <Label
                 htmlFor="waitlist-email"
@@ -94,10 +107,19 @@ export function WaitlistModal() {
                 required
               />
             </div>
-          <DialogFooter>
-            <Button type="submit">Join waitling list</Button>
-          </DialogFooter>
-        </form>
+
+            {error ? (
+              <p role="alert" className="text-sm text-destructive">
+                {error}
+              </p>
+            ) : null}
+
+            <DialogFooter>
+              <Button type="submit" disabled={pending}>
+                {pending ? "Joining…" : "Join mailing list"}
+              </Button>
+            </DialogFooter>
+          </form>
         )}
       </DialogContent>
     </Dialog>

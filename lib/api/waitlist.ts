@@ -13,8 +13,11 @@ export async function joinWaitlist(email: string): Promise<JoinWaitlistResponse>
   });
 
   if (!response.ok) {
-    const body = (await response.json().catch(() => null)) as { error?: string } | null;
-    throw new Error(body?.error ?? "Could not join the waiting list.");
+    const body = (await response.json().catch(() => null)) as {
+      error?: string;
+      message?: string;
+    } | null;
+    throw new Error(body?.message ?? body?.error ?? "Could not join the waiting list.");
   }
 
   return response.json() as Promise<JoinWaitlistResponse>;
