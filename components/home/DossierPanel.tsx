@@ -1,3 +1,4 @@
+import { WaitlistModal } from "components/home/WaitlistModal";
 import { ScrambleText } from "@/components/home/ScrambleText";
 
 /**
@@ -26,17 +27,20 @@ export function DossierPanel() {
         <ScrambleText text="Coming soon" delay={400} duration={900} idle />
       </h2>
 
-      <p className="flex items-center gap-3 font-mono text-sm tracking-widest uppercase">
-        <span aria-hidden className="size-2 shrink-0 border-2 border-primary" />
-        <span>
-          <ScrambleText
-            text="Details will be declassified shortly"
-            delay={800}
-            duration={700}
-            monospace
-          />
-        </span>
-      </p>
+      <div className="flex flex-col gap-4">
+        <p className="flex items-center gap-3 font-mono text-sm tracking-widest uppercase">
+          <span aria-hidden className="size-2 shrink-0 border-2 border-primary" />
+          <span>
+            <ScrambleText
+              text="Details will be declassified shortly"
+              delay={800}
+              duration={700}
+              monospace
+            />
+          </span>
+        </p>
+        <WaitlistModal />
+      </div>
 
       <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border pt-4 font-mono text-sm tracking-widest">
         <span className="uppercase">
