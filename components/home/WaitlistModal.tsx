@@ -22,11 +22,12 @@ export function WaitlistModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          type="button"
-          className="w-fit text-lg font-normal uppercase h-10"
-        >
-          <CaretRightIcon aria-hidden weight="fill" className="size-4 text-primary-foreground" />
+        <Button type="button" className="h-10 w-fit text-lg font-normal uppercase">
+          <CaretRightIcon
+            aria-hidden
+            weight="fill"
+            className="size-4 text-primary-foreground"
+          />
           Join waiting list
         </Button>
       </DialogTrigger>

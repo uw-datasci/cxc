@@ -39,7 +39,7 @@ export function DossierPanel() {
             />
           </span>
         </p>
-          <WaitlistModal />
+        <WaitlistModal />
       </div>
 
       <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border pt-4 font-mono text-sm tracking-widest">
