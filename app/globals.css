@@ -26,6 +26,7 @@
   --color-grid-grey: var(--grid-grey);
   --color-mid-grey: var(--mid-grey);
   --color-dark-grey: var(--dark-grey);
+  --color-terrain: var(--terrain);
   --color-black: var(--black);
   --color-blue: var(--blue);
   --color-dark-blue: var(--dark-blue);
@@ -181,6 +182,7 @@
   --grid-grey: #cecece;
   --mid-grey: #757271;
   --dark-grey: #333130;
+  --terrain: oklch(0.235 0 0);
   --black: #101010;
   --blue: #1b66ff;
   --dark-blue: #0e49c0;
