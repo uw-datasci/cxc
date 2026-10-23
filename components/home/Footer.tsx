@@ -14,7 +14,7 @@ export function Footer() {
       />
 
       <div className="-mt-40 flex min-h-120 flex-col justify-center bg-terrain text-background">
-        <div className="max-w-7xl px-10 sm:px-18 mt-22">
+        <div className="mt-22 max-w-7xl px-10 sm:px-18">
           <p className="font-mono text-5xl leading-none font-semibold uppercase sm:text-6xl">
             Follow us
           </p>

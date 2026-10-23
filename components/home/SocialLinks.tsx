@@ -16,7 +16,6 @@ interface SocialLink {
   weight: "regular" | "fill";
 }
 
-
 const SOCIAL_LINKS: SocialLink[] = [
   { label: "X", href: "https://twitter.com/uwaterloodsc", icon: XLogoIcon, weight: "regular" },
   {
