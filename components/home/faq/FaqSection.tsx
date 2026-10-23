@@ -28,8 +28,8 @@ export function FaqSection() {
           />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-6 md:x-0 lg:pt-10">
-          <div className="flex flex-col items-center lg:ml-auto lg:w-160 mt-8">
+        <div className="md:x-0 relative mx-auto max-w-7xl px-6 lg:pt-10">
+          <div className="mt-8 flex flex-col items-center lg:ml-auto lg:w-160">
             <FaqAccordion />
 
             <p className="mt-12 font-mono text-[13px] leading-relaxed">

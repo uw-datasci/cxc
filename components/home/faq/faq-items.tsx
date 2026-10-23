@@ -57,10 +57,9 @@ export const FAQ_ITEMS: FaqItem[] = [
     question: "What is the MLH Code of Conduct?",
     answer: (
       <>
-        CXC follows the Major League Hacking (MLH) Code of Conduct. All
-        participants are expected to treat others with respect and create a
-        welcoming, inclusive environment. Harassment or discrimination of any
-        kind will not be tolerated. You can read the full{" "}
+        CXC follows the Major League Hacking (MLH) Code of Conduct. All participants are
+        expected to treat others with respect and create a welcoming, inclusive environment.
+        Harassment or discrimination of any kind will not be tolerated. You can read the full{" "}
         <a
           href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md"
           target="_blank"

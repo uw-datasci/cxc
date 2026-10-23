@@ -44,7 +44,7 @@ export function FaqAccordion() {
           value={item.id}
           className="bg-card shadow-[0_2px_4px_rgb(0_0_0/0.2)] not-last:border-b-0"
         >
-          <AccordionTrigger className="items-center gap-6 border-0 px-8 py-4 text-base font-mono font-normal after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-linear-to-r after:from-primary/40 after:via-primary after:to-primary/40 hover:bg-muted hover:no-underline **:data-[slot=accordion-trigger-icon]:size-7 **:data-[slot=accordion-trigger-icon]:text-primary">
+          <AccordionTrigger className="items-center gap-6 border-0 px-8 py-4 font-mono text-base font-normal after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-linear-to-r after:from-primary/40 after:via-primary after:to-primary/40 hover:bg-muted hover:no-underline **:data-[slot=accordion-trigger-icon]:size-7 **:data-[slot=accordion-trigger-icon]:text-primary">
             <DiamondMarker />
             <span className="flex-1">{item.question}</span>
           </AccordionTrigger>
