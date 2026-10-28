@@ -28,4 +28,6 @@ export const serverConfig = {
   r2AccountId: requireEnv("R2_ACCOUNT_ID"),
   r2BucketName: requireEnv("R2_BUCKET_NAME"),
   r2SecretAccessKey: requireEnv("R2_SECRET_ACCESS_KEY"),
+  resendApiKey: requireEnv("RESEND_API_KEY"),
+  resendFromEmail: requireEnv("RESEND_FROM_EMAIL"),
 } as const;

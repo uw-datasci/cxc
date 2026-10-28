@@ -7,8 +7,9 @@
  */
 export const siteConfig = {
   /**
-   * Pre-launch lockdown. While `true`, only the coming-soon page (`/`) is reachable:
-   * every other page redirects to `/`, and every API route returns 404.
+   * Pre-launch lockdown. While `true`, only the coming-soon page (`/`) and explicitly
+   * allowlisted pre-launch API routes are reachable. Every other page redirects to `/`,
+   * and every other API route returns 404.
    *
    * Enforced in `proxy.ts`, and again in `withAuth`, `requireUser`, the `(auth)` layout,
    * and the Neon Auth handler, so a single missed check can't expose anything.
