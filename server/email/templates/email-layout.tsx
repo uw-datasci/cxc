@@ -25,7 +25,7 @@ interface EmailLayoutProps {
 /**
  * Shared frame for every CxC email: a blue header bar, the message body on a SMOKE card,
  * and a dark footer with the sender identity and a link to the site.
- * 
+ *
  * Templates pass their body as `children` and should not repeat the header or footer.
  */
 export function EmailLayout({ preview, footerNote, children }: EmailLayoutProps) {
