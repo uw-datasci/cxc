@@ -1,13 +1,14 @@
 "use client";
 
+import { Fragment } from "react";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
-import { FAQ_ITEMS } from "./faq-items";
+import { type FaqAnswer, FAQ_ITEMS } from "@/lib/constants/faq";
 
 /**
  * Sharp-cornered diamond marker: outline when closed, filled when open.
@@ -20,11 +21,37 @@ function DiamondMarker() {
     <svg
       aria-hidden
       viewBox="0 0 16 16"
-      className="size-4 shrink-0 fill-transparent stroke-primary group-aria-expanded/accordion-trigger:fill-primary"
+      className="size-5 shrink-0 fill-transparent stroke-primary group-aria-expanded/accordion-trigger:fill-primary"
     >
-      {/* Points are inset so the mitered corners are not clipped by the viewBox. */}
-      <polygon points="8,1.6 14.4,8 8,14.4 1.6,8" strokeWidth={2} strokeLinejoin="miter" />
+      <polygon points="8,1.8 14.2,8 8,14.2 1.8,8" strokeWidth={2.5} strokeLinejoin="miter" />
     </svg>
+  );
+}
+
+/**
+ * Renders an FAQ answer: plain text as-is, or a list of text and link parts.
+ */
+function FaqAnswerContent({ answer }: { answer: FaqAnswer }) {
+  if (typeof answer === "string") return <>{answer}</>;
+
+  return (
+    <>
+      {answer.map((part, index) =>
+        typeof part === "string" ? (
+          <Fragment key={index}>{part}</Fragment>
+        ) : (
+          <a
+            key={index}
+            href={part.href}
+            target="_blank"
+            rel="noreferrer"
+            className="text-black underline underline-offset-2"
+          >
+            {part.text}
+          </a>
+        )
+      )}
+    </>
   );
 }
 
@@ -37,21 +64,19 @@ function DiamondMarker() {
  */
 export function FaqAccordion() {
   return (
-    <Accordion type="single" collapsible className="gap-8">
+    <Accordion type="single" collapsible className="gap-6">
       {FAQ_ITEMS.map((item) => (
         <AccordionItem
           key={item.id}
           value={item.id}
-          className="bg-card shadow-[0_2px_4px_rgb(0_0_0/0.2)] not-last:border-b-0"
+          className="bg-card shadow-[0_3px_5px_rgb(0_0_0/0.2)] not-last:border-b-0"
         >
-          <AccordionTrigger className="items-center gap-6 border-0 px-8 py-4 font-mono text-base font-normal after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-linear-to-r after:from-primary/40 after:via-primary after:to-primary/40 hover:bg-muted hover:no-underline **:data-[slot=accordion-trigger-icon]:size-7 **:data-[slot=accordion-trigger-icon]:text-primary">
+          <AccordionTrigger className="items-center gap-6 border-0 px-6 py-4 font-mono text-base font-normal after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-linear-to-r after:from-primary/40 after:via-primary after:to-primary/40 hover:bg-muted hover:no-underline **:data-[slot=accordion-trigger-icon]:size-7 **:data-[slot=accordion-trigger-icon]:text-primary">
             <DiamondMarker />
             <span className="flex-1">{item.question}</span>
           </AccordionTrigger>
-
-          {/* pl-16 lines the answer up with the question text. */}
-          <AccordionContent className="pt-4 pr-8 pb-6 pl-16 font-mono text-base leading-relaxed">
-            {item.answer}
+          <AccordionContent className="pt-4 pr-6 pb-6 pl-17 font-mono text-sm leading-relaxed">
+            <FaqAnswerContent answer={item.answer} />
           </AccordionContent>
         </AccordionItem>
       ))}
