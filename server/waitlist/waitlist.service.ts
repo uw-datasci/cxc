@@ -25,7 +25,7 @@ export type WaitlistResult =
  * holds no per-user state. Use the shared {@link waitlistService} instance rather than
  * constructing one per request.
  */
-export class WaitlistService {
+class WaitlistService {
   private readonly repository = new WaitlistRepository();
 
   async join(input: { email: string }): Promise<WaitlistResult> {
