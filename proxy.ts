@@ -4,12 +4,17 @@ import { COMING_SOON_PATH, siteConfig } from "@/config/site";
 import { auth } from "@/lib/auth/server";
 
 const requireSession = auth.middleware({ loginUrl: "/sign-in" });
+const PRELAUNCH_API_PATHS = new Set(["/api/waitlist"]);
 
 export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (siteConfig.comingSoon && pathname !== COMING_SOON_PATH) {
-    if (pathname === "/api" || pathname.startsWith("/api/")) return RaftResponse.notFound();
+    if (pathname === "/api" || pathname.startsWith("/api/")) {
+      if (!PRELAUNCH_API_PATHS.has(pathname)) return RaftResponse.notFound();
+      return NextResponse.next();
+    }
+
     return NextResponse.redirect(new URL(COMING_SOON_PATH, request.url));
   }
 

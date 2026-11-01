@@ -23,15 +23,17 @@ server/
 
 Add new domains by creating a folder and the two files above.
 
-`shared/` is the one folder that is **not** a domain. It holds infrastructure the domains build on — currently `base.repository.ts`. Keep it small: anything that belongs to a feature belongs in that feature's folder instead.
+`shared/` is the one folder that is **not** a domain. It holds infrastructure the domains build on — currently `base.repository.ts` and `rate-limit.ts`. Keep it small: anything that belongs to a feature belongs in that feature's folder instead.
+
+`email/` is the other piece of shared infrastructure. `email.service.ts` exports an `emailService` singleton that renders a React Email template and sends it through the Resend client in `config/resend.ts`; `email.theme.ts` holds the resolved brand colors, and `templates/` holds one file per email. Domain services build their template and call `emailService.send(...)` rather than importing Resend themselves.
 
 ## Naming conventions
 
-| File | Pattern | Example |
-|------|---------|---------|
-| Service | `{domain}.service.ts` | `users/users.service.ts` |
-| Repository | `{domain}.repository.ts` | `users/users.repository.ts` |
-| Folder | Singular or plural domain name (pick one and stay consistent) | `users/` or `user/` |
+| File       | Pattern                                                       | Example                     |
+| ---------- | ------------------------------------------------------------- | --------------------------- |
+| Service    | `{domain}.service.ts`                                         | `users/users.service.ts`    |
+| Repository | `{domain}.repository.ts`                                      | `users/users.repository.ts` |
+| Folder     | Singular or plural domain name (pick one and stay consistent) | `users/` or `user/`         |
 
 ## Responsibilities
 
