@@ -21,7 +21,6 @@ function formatUnit(value: number): string {
 }
 
 interface CountdownPanelProps {
-  /** ISO string with an explicit UTC offset. */
   target?: string;
   className?: string;
 }
