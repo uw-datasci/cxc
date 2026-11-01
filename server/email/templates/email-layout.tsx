@@ -15,7 +15,6 @@ import {
 import { emailBrand, emailColours, emailFonts } from "../email.theme";
 
 interface EmailLayoutProps {
-  /** Inbox preview text shown next to the subject line. */
   preview: string;
   /** Why the recipient is getting this email, shown in the footer. */
   footerNote: string;
