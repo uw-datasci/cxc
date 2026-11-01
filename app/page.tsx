@@ -1,4 +1,5 @@
 import { ComingSoon } from "@/components/home/ComingSoon";
+import { Footer } from "components/home/Footer";
 import { FaqSection } from "components/home/faq/FaqSection";
 
 export default function Page() {
@@ -6,6 +7,7 @@ export default function Page() {
     <div>
       <ComingSoon />
       <FaqSection />
+      <Footer />
     </div>
   );
 }
