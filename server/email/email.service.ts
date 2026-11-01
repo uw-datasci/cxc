@@ -11,7 +11,6 @@ export interface SendEmailInput {
   to: string;
   subject: string;
   template: ReactElement;
-  /** Plain-text alternative for clients that do not render HTML. */
   text: string;
 }
 
