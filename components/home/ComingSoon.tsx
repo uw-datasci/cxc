@@ -61,7 +61,6 @@ const originClass = {
 } as const;
 
 interface ComingSoonProps {
-  /** Fills the panel slot under the logo. Defaults to {@link DossierPanel}. */
   children?: ReactNode;
 }
 
