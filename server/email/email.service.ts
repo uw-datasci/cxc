@@ -10,7 +10,6 @@ import { serverConfig } from "@/config/server";
 export interface SendEmailInput {
   to: string;
   subject: string;
-  /** React Email template, rendered to the HTML body. */
   template: ReactElement;
   /** Plain-text alternative for clients that do not render HTML. */
   text: string;
