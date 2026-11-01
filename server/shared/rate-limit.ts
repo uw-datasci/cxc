@@ -9,14 +9,12 @@ interface Window {
 }
 
 /**
- * Fixed-window, in-memory rate limiter keyed by an arbitrary string (usually a client IP).
+ * In-memory rate limiter (fixed window), keyed by a string such as a client IP.
  *
- * Counters live in the memory of one server instance. On Vercel each warm function
- * instance keeps its own counters and they reset on cold start, so this blunts casual
- * floods and scripted retries but is not a hard global cap. For a strict limit, put a
- * shared store (e.g. Redis) behind the same `check` interface or add a platform-level
- * rule such as a Vercel WAF rate limit.
+ * Counters are stored per server instance and reset on cold start, so on Vercel this
+ * only blunts casual abuse and is not a strict global limit.
  */
+
 export class RateLimiter {
   private readonly windows = new Map<string, Window>();
   private lastSweep = Date.now();
