@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import { DossierPanel } from "@/components/home/DossierPanel";
 import { CompassNeedle, RadarSweep, Reticle } from "@/components/home/Reticle";
@@ -60,7 +60,12 @@ const originClass = {
   bottom: "origin-bottom",
 } as const;
 
-export function ComingSoon() {
+interface ComingSoonProps {
+  /** Fills the panel slot under the logo. Defaults to {@link DossierPanel}. */
+  children?: ReactNode;
+}
+
+export function ComingSoon({ children }: ComingSoonProps) {
   return (
     <>
       <main className="relative isolate min-h-svh overflow-hidden">
@@ -171,7 +176,7 @@ export function ComingSoon() {
             <span className="sr-only"> — UWaterloo Data Science Club AI datathon</span>
           </h1>
 
-          <DossierPanel />
+          {children ?? <DossierPanel />}
         </div>
       </main>
     </>

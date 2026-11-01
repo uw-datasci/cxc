@@ -1,90 +1,33 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
 import { CaretDownIcon } from "@phosphor-icons/react";
 
-import { CXC_START, formatUnit, getTimeRemaining } from "@/lib/countdown";
+import { useCountdown } from "@/lib/hooks/useCountdown";
 import { cn } from "@/lib/utils";
 
 /**
- * The countdown, built to drop into the slot {@link DossierPanel} occupies.
- *
- * NOT RENDERED YET. It is staged here so that the moment the application
- * release date is confirmed, swapping it in is a two-line change in
- * `ComingSoon.tsx` — the import, and `<DossierPanel />` → `<CountdownPanel />`.
- * It keeps the dossier card's `max-w-4xl` width so the swap moves nothing else
- * on the page.
- *
- * The unit styling reproduces the Figma countdown frame: a SMOKE card holding
- * the numeral, a white caret, then a bordered label strip, stacked with 10px
- * gaps. Unlike the Figma frame it is fluid rather than pinned at 173px wide,
- * because here it has to share a page that scales — the card keeps the design's
- * 173:224 proportions instead.
+ * TODO: placeholder until the application release date is confirmed.
  */
+const CXC_START = "2026-12-06T09:00:00-05:00";
+
 const UNITS = ["DAYS", "HOURS", "MINUTES", "SECONDS"] as const;
 
 /** Shown before the first client tick, so server and client markup match. */
 const PLACEHOLDER = "--";
 
-/*
- * A one-second clock as an external store.
- *
- * `useSyncExternalStore` is the right tool for a value React does not own, and
- * it hydrates cleanly: the server render and the hydration pass both use
- * `getServerSnapshot`, so the markup matches and the live value only arrives
- * afterwards. The snapshot is cached rather than returning `Date.now()` per
- * call, which would look like an endless change to React. One interval is
- * shared by every subscriber and stops when the last one unmounts.
- */
-let snapshot = Date.now();
-const listeners = new Set<() => void>();
-let timer: ReturnType<typeof setInterval> | null = null;
-
-function subscribeToClock(onStoreChange: () => void) {
-  listeners.add(onStoreChange);
-
-  timer ??= setInterval(() => {
-    snapshot = Date.now();
-    for (const listener of listeners) listener();
-  }, 1000);
-
-  return () => {
-    listeners.delete(onStoreChange);
-    if (listeners.size === 0 && timer !== null) {
-      clearInterval(timer);
-      timer = null;
-    }
-  };
+/** Two-digit display value, as in the mockup: `3` renders as `03`. */
+function formatUnit(value: number): string {
+  return value.toString().padStart(2, "0");
 }
 
-/** Used once the target has passed: nothing left to count down to. */
-function subscribeToNothing() {
-  return () => {};
-}
-
-const getClockSnapshot = () => snapshot;
-const getServerClockSnapshot = () => null;
-
-export function CountdownPanel({
-  target = CXC_START,
-  className,
-}: {
+interface CountdownPanelProps {
   /** ISO string with an explicit UTC offset. */
   target?: string;
   className?: string;
-}) {
-  const targetTime = new Date(target).getTime();
+}
 
-  // Once complete, swapping in a no-op subscribe makes React unsubscribe from
-  // the clock, so the interval stops rather than re-rendering zeroes forever.
-  const isComplete = snapshot >= targetTime;
-  const now = useSyncExternalStore(
-    isComplete ? subscribeToNothing : subscribeToClock,
-    getClockSnapshot,
-    getServerClockSnapshot
-  );
-
-  const remaining = now === null ? null : getTimeRemaining(new Date(targetTime), new Date(now));
+export function CountdownPanel({ target = CXC_START, className }: CountdownPanelProps) {
+  const remaining = useCountdown(target);
   const values = remaining
     ? [remaining.days, remaining.hours, remaining.minutes, remaining.seconds].map(formatUnit)
     : UNITS.map(() => PLACEHOLDER);
@@ -92,20 +35,14 @@ export function CountdownPanel({
   return (
     <section
       aria-labelledby="countdown-heading"
-      className={cn(
-        "w-full max-w-4xl animate-boot-fade motion-reduce:animate-none",
-        className
-      )}
+      className={cn("w-full max-w-4xl animate-boot-fade motion-reduce:animate-none", className)}
     >
       <h2 id="countdown-heading" className="sr-only">
         Time until CxC
       </h2>
 
-      {/*
-        One polite live region for the whole timer. Four regions announcing every
-        second would be unusable, so seconds are left out and the sentence
-        changes about once a minute.
-      */}
+      {/* One polite live region for the whole timer; seconds are left out so it
+          announces about once a minute rather than every second. */}
       <p className="sr-only" aria-live="polite">
         {remaining
           ? `${remaining.days} days, ${remaining.hours} hours and ${remaining.minutes} minutes until CxC begins.`
@@ -117,14 +54,13 @@ export function CountdownPanel({
           <div key={label} className="flex flex-col items-center gap-2.5">
             {/* Figma: 173 x 224. Held as a ratio so the card can scale with the page. */}
             <div className="flex aspect-173/224 w-full items-center justify-center border border-border bg-card">
-              {/*
-                Deliberately not `tabular-nums`: Alte Haas sets its tabular `1`
-                to the right of its cell and the other digits to the left, which
-                drags any value without a leading `1` off centre. Its default
-                figures are already near-uniform in width, so nothing reflows on
-                each tick.
-              */}
-              <span aria-hidden className="text-5xl font-bold text-primary sm:text-6xl md:text-7xl">
+              {/* Deliberately not `tabular-nums`: Alte Haas sets its tabular `1` right of
+                  its cell and the other digits left, dragging any value without a leading
+                  `1` off centre. Its default figures are near-uniform, so nothing reflows. */}
+              <span
+                aria-hidden
+                className="text-5xl font-bold text-primary sm:text-6xl md:text-7xl"
+              >
                 {values[index]}
               </span>
             </div>
