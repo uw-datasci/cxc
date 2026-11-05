@@ -1,0 +1,140 @@
+import { SectionBar } from "@/components/ui/section-bar";
+import { cn } from "@/lib/utils";
+
+interface Tier {
+  id: string;
+  label: string;
+  slots: number;
+  /**
+   * Row and tile widths. Tiers stack full-width on small screens and take the
+   * Figma frame's proportions of the 1079px content column from `sm` up.
+   */
+  row: string;
+  tile: string;
+  aspect: string;
+  /**
+   * Metallic label fill. Gradients are forbidden by the design system, but the
+   * tier names are the one place the Figma depends on them.
+   */
+  gradient: string;
+}
+
+const TIERS: Tier[] = [
+  {
+    id: "platinum",
+    label: "Platinum sponsor",
+    slots: 1,
+    row: "w-full sm:w-[89%]",
+    tile: "w-full",
+    aspect: "aspect-5/2 sm:aspect-6/1",
+    gradient: "linear-gradient(90deg, #bbbbbb 0%, #888888 100%)",
+  },
+  {
+    id: "gold",
+    label: "Gold sponsors",
+    slots: 2,
+    row: "w-full sm:w-[77.2%]",
+    tile: "w-full sm:w-[48%]",
+    aspect: "aspect-8/3",
+    gradient: "linear-gradient(90deg, #ddcda1 0%, #b6963e 100%)",
+  },
+  {
+    id: "silver",
+    label: "Silver sponsors",
+    slots: 2,
+    row: "w-full sm:w-[77.8%]",
+    tile: "w-full sm:w-[42.9%]",
+    aspect: "aspect-8/3",
+    gradient: "linear-gradient(90deg, #999790 0%, #696761 100%)",
+  },
+  {
+    id: "bronze",
+    label: "Bronze sponsors",
+    slots: 6,
+    row: "w-full",
+    tile: "w-[47%] sm:w-[29.7%]",
+    aspect: "aspect-8/3",
+    gradient: "linear-gradient(90deg, #ddc1a1 0%, #b6763e 100%)",
+  },
+];
+
+export function SponsorsSection() {
+  return (
+    <section id="sponsors" className="relative scroll-mt-8 overflow-hidden py-10">
+      <HudMarkers />
+
+      <SectionBar number="03" title="Our sponsors" className="relative" />
+
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 pt-14 sm:px-10">
+        {TIERS.map((tier) => (
+          <TierBlock key={tier.id} tier={tier} />
+        ))}
+      </div>
+
+      <p className="relative mx-auto mt-16 max-w-7xl px-6 text-center font-mono text-xs uppercase sm:px-10 sm:text-xl">
+        Want to become a sponsor?{" "}
+        {/* TODO: point at the sponsorship form once the URL is confirmed. */}
+        <a
+          href="#"
+          className="text-primary underline underline-offset-4 hover:text-dark-blue focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+        >
+          Fill out this form
+        </a>
+      </p>
+    </section>
+  );
+}
+
+function TierBlock({ tier }: { tier: Tier }) {
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <h3
+        className="bg-clip-text text-center font-mono text-base font-bold text-transparent uppercase sm:text-2xl md:text-3xl"
+        style={{ backgroundImage: tier.gradient }}
+      >
+        {tier.label}
+      </h3>
+
+      <ul className={cn(
+          "flex flex-wrap justify-center gap-x-3 gap-y-6 sm:justify-between sm:gap-x-0 sm:gap-y-9",
+          tier.row
+        )}>
+        {Array.from({ length: tier.slots }, (_, index) => (
+          <li key={index} className={tier.tile}>
+            <SponsorTile className={tier.aspect} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/**
+ * A SMOKE card inset in blue corner brackets. Figma draws the brackets as a
+ * stroke whose gradient cuts to transparent at 20%; two solid L-shapes render
+ * the same thing without a gradient.
+ */
+function SponsorTile({ className }: { className?: string }) {
+  return (
+    // TODO: replace with sponsor logos once the roster is confirmed.
+    <div aria-hidden className={cn("relative w-full", className)}>
+      <span className="absolute top-0 left-0 h-1/4 w-1/5 border-t-2 border-l-2 border-primary" />
+      <span className="absolute right-0 bottom-0 h-1/4 w-1/5 border-r-2 border-b-2 border-primary" />
+      <div className="absolute inset-1.5 bg-card sm:inset-2.5" />
+    </div>
+  );
+}
+
+// Figma `Rectangle 211`/`297`/`298` and their hairlines, as fractions of the section.
+function HudMarkers() {
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 hidden sm:block">
+      <span className="absolute top-[9.8%] left-[91.5%] size-2.25 border-2 border-primary" />
+      <span className="absolute top-[10.1%] left-[84.2%] h-px w-[6.6%] bg-foreground" />
+      <span className="absolute top-[11.2%] left-[91.9%] h-[21.4%] w-px bg-foreground" />
+      <span className="absolute top-[91.6%] left-[8.2%] h-[5.7%] w-px bg-foreground" />
+      <span className="absolute top-[97.8%] left-[7.8%] size-2.25 border-2 border-primary" />
+      <span className="absolute top-[98.9%] left-[7.8%] size-2.25 border-2 border-primary" />
+    </div>
+  );
+}
