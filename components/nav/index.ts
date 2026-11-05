@@ -1,1 +1,1 @@
-export { Nav } from "@/components/nav/nav";
+export { Nav } from "components/nav/Nagivation";

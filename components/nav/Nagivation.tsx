@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-import { MobileNav } from "@/components/nav/mobile-nav";
+import { MobileNav } from "components/nav/MobileNavigation";
 import {
   NavigationMenu,
   NavigationMenuItem,
