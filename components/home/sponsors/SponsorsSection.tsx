@@ -117,12 +117,14 @@ function SponsorTile({ className }: { className?: string }) {
 function HudMarkers() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 hidden sm:block">
+      <div className="relative mx-auto h-full w-full max-w-7xl">
       <span className="absolute top-[9.8%] left-[91.5%] size-2.25 border-2 border-primary" />
       <span className="absolute top-[10.1%] left-[84.2%] h-px w-[6.6%] bg-foreground" />
       <span className="absolute top-[11.2%] left-[91.9%] h-[21.4%] w-px bg-foreground" />
       <span className="absolute top-[91.6%] left-[8.2%] h-[5.7%] w-px bg-foreground" />
       <span className="absolute top-[97.8%] left-[7.8%] size-2.25 border-2 border-primary" />
       <span className="absolute top-[98.9%] left-[7.8%] size-2.25 border-2 border-primary" />
+      </div>
     </div>
   );
 }
