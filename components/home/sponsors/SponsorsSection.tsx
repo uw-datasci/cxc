@@ -5,17 +5,9 @@ interface Tier {
   id: string;
   label: string;
   slots: number;
-  /**
-   * Row and tile widths. Tiers stack full-width on small screens and take the
-   * Figma frame's proportions of the 1079px content column from `sm` up.
-   */
   row: string;
   tile: string;
   aspect: string;
-  /**
-   * Metallic label fill. Gradients are forbidden by the design system, but the
-   * tier names are the one place the Figma depends on them.
-   */
   gradient: string;
 }
 
@@ -95,10 +87,12 @@ function TierBlock({ tier }: { tier: Tier }) {
         {tier.label}
       </h3>
 
-      <ul className={cn(
+      <ul
+        className={cn(
           "flex flex-wrap justify-center gap-x-3 gap-y-6 sm:justify-between sm:gap-x-0 sm:gap-y-9",
           tier.row
-        )}>
+        )}
+      >
         {Array.from({ length: tier.slots }, (_, index) => (
           <li key={index} className={tier.tile}>
             <SponsorTile className={tier.aspect} />
@@ -109,11 +103,6 @@ function TierBlock({ tier }: { tier: Tier }) {
   );
 }
 
-/**
- * A SMOKE card inset in blue corner brackets. Figma draws the brackets as a
- * stroke whose gradient cuts to transparent at 20%; two solid L-shapes render
- * the same thing without a gradient.
- */
 function SponsorTile({ className }: { className?: string }) {
   return (
     // TODO: replace with sponsor logos once the roster is confirmed.
@@ -125,7 +114,6 @@ function SponsorTile({ className }: { className?: string }) {
   );
 }
 
-// Figma `Rectangle 211`/`297`/`298` and their hairlines, as fractions of the section.
 function HudMarkers() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 hidden sm:block">
