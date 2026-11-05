@@ -21,7 +21,6 @@ const CELL = 100; // viewBox units; the rendered size comes from the svg's width
 type HeroGridProps = {
   cols?: number;
   rows?: number;
-  /** Open overhang past the first line, in cells. 0 closes that side. */
   bleed?: { top?: number; left?: number };
   cell?: string;
   className?: string;
