@@ -23,7 +23,6 @@ type HeroGridProps = {
   rows?: number;
   /** Open overhang past the first line, in cells. 0 closes that side. */
   bleed?: { top?: number; left?: number };
-  /** Any CSS length. Sets the width so one cell is this size. */
   cell?: string;
   className?: string;
   style?: CSSProperties;
