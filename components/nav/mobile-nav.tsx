@@ -1,15 +1,16 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { ListIcon } from "@phosphor-icons/react";
+import { ListIcon, XIcon } from "@phosphor-icons/react";
 import { useState, type MouseEvent } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { navLinks } from "@/lib/constants/nav";
@@ -40,11 +41,26 @@ export function MobileNav() {
         </SheetTrigger>
         <SheetContent
           aria-describedby={undefined}
-          className="w-full! max-w-none sm:max-w-none"
+          className="w-full! max-w-none p-2 sm:max-w-none"
           onCloseAutoFocus={(event) => event.preventDefault()}
+          showCloseButton={false}
         >
           <SheetHeader className="flex-row items-center justify-between">
-            <SheetTitle>Navigation</SheetTitle>
+            <Link aria-label="CxC home" className="shrink-0" href="/">
+              <Image
+                src="/home/cxc-logo.svg"
+                alt="UW Data Science Club"
+                width={75}
+                height={27}
+                priority
+                className="brightness-0"
+              />
+            </Link>
+            <SheetClose asChild>
+              <Button aria-label="Close navigation menu" size="icon" variant="ghost">
+                <XIcon aria-hidden className="size-6" />
+              </Button>
+            </SheetClose>
           </SheetHeader>
           <nav aria-label="Mobile navigation" className="mt-8 flex flex-col px-4">
             {navLinks.map((link) => (
