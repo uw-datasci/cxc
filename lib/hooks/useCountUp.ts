@@ -28,8 +28,6 @@ export function useCountUp({ target, durationMs = 1600 }: UseCountUpOptions) {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Zeroed while off screen, so a fast scroll or a slow frame can never show
-        // the final figure first and then count up from zero.
         if (!entry.isIntersecting) {
           setValue(0);
           return;
