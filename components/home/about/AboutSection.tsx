@@ -33,6 +33,18 @@ function place(x: number, y: number, w: number, h?: number): CSSProperties {
   };
 }
 
+const ABOUT_COPY =
+  "Join us for the 6th year of Waterloo\u2019s largest student-run AI hackathon! We are a " +
+  "beginner-friendly AI hackathon that brings together students and companies to build " +
+  "projects that solve real-world problems. Join us again this year for a weekend of " +
+  "hacking and fun!";
+
+const BELONG_COPY =
+  "Meet a community of like-minded hackers, network with our company sponsors and judges, " +
+  "and build the project you\u2019ve always been dreaming of. With AI at the forefront of " +
+  "the world recently, CxC is the perfect place for veterans and fledgling hackers to get " +
+  "started!";
+
 const STATS: Stat[] = [
   { value: 300, suffix: "+", label: "Participants" },
   { value: 20000, prefix: "$", label: "In prizes" },
@@ -80,7 +92,7 @@ export function AboutSection() {
               "linear-gradient(180deg, #1C1B1B 50.28%, rgba(29,28,28,0.77) 67.31%, rgba(31,30,31,0.43) 84.13%, rgba(0,0,0,0) 100%)",
           }}
         >
-          <dl className="mx-auto grid w-full max-w-7xl grid-cols-3 gap-6 px-16 text-background">
+          <dl className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-6 text-background sm:grid-cols-3 sm:gap-6 sm:px-16">
             {STATS.map((stat) => (
               <div key={stat.label} className="flex flex-col items-center gap-4 text-center">
                 <dt className="sr-only">{stat.label}</dt>
@@ -99,7 +111,9 @@ export function AboutSection() {
       </figure>
       </div>
 
-      <div className="@container relative aspect-1280/1624 w-full overflow-hidden">
+      <LowerCollageMobile />
+
+      <div className="@container relative hidden aspect-1280/1624 w-full overflow-hidden sm:block">
         <GridBackdrop style={place(-2, 2112, 1079, 628)} />
 
         {/* Frame 200: Figma's 180deg rotation plus a vertical flip is a horizontal mirror. */}
@@ -121,10 +135,7 @@ export function AboutSection() {
           className="absolute font-mono text-[clamp(0.6875rem,1.72cqw,1.375rem)] leading-snug"
           style={place(100, 2277, 534)}
         >
-          Join us for the 6th year of Waterloo&rsquo;s largest student-run AI hackathon! We
-          are a beginner-friendly AI hackathon that brings together students and companies to
-          build projects that solve real-world problems. Join us again this year for a
-          weekend of hacking and fun!
+          {ABOUT_COPY}
         </p>
 
         <div className="absolute" style={place(694, 3360, 480)}>
@@ -137,10 +148,7 @@ export function AboutSection() {
           className="absolute text-right font-mono text-[clamp(0.6875rem,1.72cqw,1.375rem)] leading-snug"
           style={place(591, 3444, 585)}
         >
-          Meet a community of like-minded hackers, network with our company sponsors and
-          judges, and build the project you&rsquo;ve always been dreaming of. With AI at the
-          forefront of the world recently, CxC is the perfect place for veterans and
-          fledgling hackers to get started!
+          {BELONG_COPY}
         </p>
 
         {/* Group 96: Figma reports it by its rotated bbox, so it is placed from that centre. */}
@@ -161,6 +169,40 @@ export function AboutSection() {
       </div>
 
     </section>
+  );
+}
+
+/**
+ * The phone layout for everything below the stats band. The desktop collage is one
+ * fixed-aspect stage of absolutely placed Figma coordinates, which only reads as a
+ * composition at that width, so phones get a stacked flow instead, without the two
+ * landmasses. Both draw their copy from the same constants, and each is
+ * `display: none` at the other's widths, so only one reaches the accessibility tree.
+ */
+function LowerCollageMobile() {
+  return (
+    <div className="flex flex-col gap-10 px-6 sm:hidden">
+      <div>
+        <AccentHeading className="text-header-small">About CxC</AccentHeading>
+        <p className="mt-4 font-mono text-sm leading-snug">{ABOUT_COPY}</p>
+      </div>
+
+      <PhotoPlaceholder className="relative aspect-4/3 w-full" />
+
+      <div className="flex gap-4">
+        <PhotoPlaceholder className="relative aspect-4/3 w-1/2" />
+        <PhotoPlaceholder className="relative aspect-4/3 w-1/2" />
+      </div>
+
+      <Chevrons className="relative mx-auto w-1/2" />
+
+      <div>
+        <AccentHeading className="text-header-small">You belong here</AccentHeading>
+        <p className="mt-4 font-mono text-sm leading-snug">{BELONG_COPY}</p>
+      </div>
+
+      <PhotoPlaceholder className="relative aspect-4/3 w-full" />
+    </div>
   );
 }
 
@@ -192,7 +234,7 @@ function HudMarkers() {
   ];
 
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0">
+    <div aria-hidden className="pointer-events-none absolute inset-0 hidden sm:block">
       {squares.map((pos) => (
         <span
           key={`${pos.left}-${pos.top}`}

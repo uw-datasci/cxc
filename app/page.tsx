@@ -9,14 +9,11 @@ import { FaqSection } from "components/home/faq/FaqSection";
 // release date is confirmed.
 const showCountdown = process.env.NODE_ENV === "development";
 
-// TODO: drop the gate once event photography replaces the placeholders.
-const showAbout = process.env.NODE_ENV === "development";
-
 export default function Page() {
   return (
     <div>
       <ComingSoon>{showCountdown ? <CountdownPanel /> : <DossierPanel />}</ComingSoon>
-      {showAbout && <AboutSection />}
+      <AboutSection />
       <FaqSection />
       <Footer />
     </div>
