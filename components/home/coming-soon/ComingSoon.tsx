@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 
-import { CompassNeedle, RadarSweep, Reticle } from "@/components/home/Reticle";
+import { CompassNeedle, RadarSweep, Reticle } from "./Reticle";
 import { cn } from "@/lib/utils";
 
 // Decor is laid out in the coordinates of the Figma frame (1169:24809), then scaled to cover
