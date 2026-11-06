@@ -3,15 +3,11 @@ import { UserIcon } from "@phosphor-icons/react/dist/ssr";
 
 import type { TeamMember } from "@/lib/constants/team";
 
-/** Keep in sync with the grid columns in `Team`. */
-const IMAGE_SIZES =
-  "(min-width: 1024px) 16vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, 50vw";
-
 interface TeamMemberCardProps {
   member: TeamMember;
 }
 
-export function TeamMemberCard({ member }: TeamMemberCardProps) {
+export function TeamMemberCard({ member }: Readonly<TeamMemberCardProps>) {
   const { name, role, image } = member;
 
   return (
@@ -21,7 +17,7 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
           src={image}
           alt=""
           fill
-          sizes={IMAGE_SIZES}
+          sizes="(min-width: 1024px) 16vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, 50vw"
           className="object-cover object-top"
         />
       ) : (

@@ -1,7 +1,6 @@
 export interface TeamMember {
   id: string;
   name: string;
-  /* Shown on hover */
   role: string;
   image?: string;
 }
@@ -11,6 +10,7 @@ export interface TeamGroup {
   members: readonly TeamMember[];
 }
 
+// TODO: replace placeholder members with the real team (names, roles, photos).
 export const TEAM_GROUPS: readonly TeamGroup[] = [
   {
     id: "vps",
