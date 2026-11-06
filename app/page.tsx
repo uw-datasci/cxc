@@ -14,13 +14,7 @@ const hasLaunched = (): boolean => Date.now() >= new Date(siteConfig.launchAt).g
 export default async function Page() {
   await connection(); // Render per request, so the check uses the current time rather than the build time.
 
-  const heroSection = hasLaunched() ? (
-    <Hero />
-  ) : (
-    <ComingSoon>
-      <CountdownPanel />
-    </ComingSoon>
-  );
+  const heroSection = hasLaunched() ? <Hero /> : <ComingSoon><CountdownPanel /></ComingSoon>;
 
   return (
     <div>
