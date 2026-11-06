@@ -1,7 +1,6 @@
 import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 
-import { DossierPanel } from "@/components/home/DossierPanel";
 import { CompassNeedle, RadarSweep, Reticle } from "@/components/home/Reticle";
 import { cn } from "@/lib/utils";
 
@@ -175,7 +174,7 @@ export function ComingSoon({ children }: ComingSoonProps) {
             <span className="sr-only"> — UWaterloo Data Science Club AI datathon</span>
           </h1>
 
-          {children ?? <DossierPanel />}
+          {children}
         </div>
       </main>
     </>
