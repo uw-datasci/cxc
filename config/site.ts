@@ -14,7 +14,15 @@ export const siteConfig = {
    * Enforced in `proxy.ts`, and again in `withAuth`, `requireUser`, the `(auth)` layout,
    * and the Neon Auth handler, so a single missed check can't expose anything.
    */
-  comingSoon: true,
+  comingSoon: true, // TODO: remove once the application release date is confirmed
+
+  /**
+   * When the home page countdown ends and the hero replaces it. An ISO string with an
+   * explicit UTC offset. Independent of `comingSoon`, which must still be turned off by hand.
+   *
+   * TODO: placeholder until the application release date is confirmed.
+   */
+  launchAt: "2026-12-06T09:00:00-05:00",
 } as const;
 
 /** The only page that is served while {@link siteConfig.comingSoon} is on. */
