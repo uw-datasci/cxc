@@ -39,7 +39,7 @@ export function MobileNav() {
     event.preventDefault();
     const hash = href.slice(href.indexOf("#"));
     window.history.pushState(null, "", hash);
-    document.querySelector(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.querySelector(hash)?.scrollIntoView({ block: "start" });
     setIsOpen(false);
   }
 
