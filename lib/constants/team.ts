@@ -1,7 +1,6 @@
 export interface TeamMember {
   id: string;
   name: string;
-  /* Shown on hover */
   role: string;
   image?: string;
 }
