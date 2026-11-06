@@ -7,6 +7,7 @@ import { FaqSection } from "@/components/home/faq/FaqSection";
 import { Footer } from "@/components/home/footer/Footer";
 import { Hero } from "@/components/home/hero/Hero";
 import { Team } from "@/components/home/team/Team";
+import { Nav } from "@/components/nav";
 import { siteConfig } from "@/config/site";
 
 const hasLaunched = (): boolean => Date.now() >= new Date(siteConfig.launchAt).getTime();
@@ -18,6 +19,7 @@ export default async function Page() {
 
   return (
     <div>
+      <Nav />
       {heroSection}
       <AboutSection />
       <FaqSection />
