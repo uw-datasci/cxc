@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 
-import { CompassLean } from "@/components/home/CompassLean";
+import { CompassLean } from "./CompassLean";
 import { cn } from "@/lib/utils";
 
 type Tone = "border" | "dark-grey" | "card" | "foreground";

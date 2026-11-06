@@ -1,8 +1,7 @@
 import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 
-import { DossierPanel } from "@/components/home/DossierPanel";
-import { CompassNeedle, RadarSweep, Reticle } from "@/components/home/Reticle";
+import { CompassNeedle, RadarSweep, Reticle } from "./Reticle";
 import { cn } from "@/lib/utils";
 
 // Decor is laid out in the coordinates of the Figma frame (1169:24809), then scaled to cover
@@ -64,9 +63,9 @@ interface ComingSoonProps {
   children?: ReactNode;
 }
 
-export function ComingSoon({ children }: ComingSoonProps) {
+export function ComingSoon({ children }: Readonly<ComingSoonProps>) {
   return (
-    <>
+    
       <main className="relative isolate min-h-svh overflow-hidden">
         <div
           aria-hidden
@@ -175,9 +174,8 @@ export function ComingSoon({ children }: ComingSoonProps) {
             <span className="sr-only"> — UWaterloo Data Science Club AI datathon</span>
           </h1>
 
-          {children ?? <DossierPanel />}
+          {children}
         </div>
       </main>
-    </>
   );
 }

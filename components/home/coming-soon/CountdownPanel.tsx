@@ -1,14 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { CaretDownIcon } from "@phosphor-icons/react";
 
+import { siteConfig } from "@/config/site";
 import { useCountdown } from "@/lib/hooks/useCountdown";
 import { cn } from "@/lib/utils";
-
-/**
- * TODO: placeholder until the application release date is confirmed.
- */
-const CXC_START = "2026-12-06T09:00:00-05:00";
 
 const UNITS = ["DAYS", "HOURS", "MINUTES", "SECONDS"] as const;
 
@@ -25,8 +23,15 @@ interface CountdownPanelProps {
   className?: string;
 }
 
-export function CountdownPanel({ target = CXC_START, className }: CountdownPanelProps) {
+export function CountdownPanel({ target = siteConfig.launchAt, className }: Readonly<CountdownPanelProps>) {
+  const router = useRouter();
   const remaining = useCountdown(target);
+  const isComplete = remaining?.isComplete === true;
+
+  useEffect(() => {
+    if (isComplete) router.refresh();
+  }, [isComplete, router]);
+
   const values = remaining
     ? [remaining.days, remaining.hours, remaining.minutes, remaining.seconds].map(formatUnit)
     : UNITS.map(() => PLACEHOLDER);
