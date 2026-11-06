@@ -6,6 +6,7 @@ import { CountdownPanel } from "@/components/home/coming-soon/CountdownPanel";
 import { FaqSection } from "@/components/home/faq/FaqSection";
 import { Footer } from "@/components/home/footer/Footer";
 import { Hero } from "@/components/home/hero/Hero";
+import { ProjectsSection } from "@/components/home/projects/ProjectsSection";
 import { Team } from "@/components/home/team/Team";
 import { Nav } from "@/components/nav";
 import { siteConfig } from "@/config/site";
@@ -22,6 +23,7 @@ export default async function Page() {
       <Nav />
       {heroSection}
       <AboutSection />
+      <ProjectsSection />
       <FaqSection />
       <Team />
       <Footer />
