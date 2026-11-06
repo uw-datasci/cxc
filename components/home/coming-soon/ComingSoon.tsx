@@ -63,9 +63,9 @@ interface ComingSoonProps {
   children?: ReactNode;
 }
 
-export function ComingSoon({ children }: ComingSoonProps) {
+export function ComingSoon({ children }: Readonly<ComingSoonProps>) {
   return (
-    <>
+    
       <main className="relative isolate min-h-svh overflow-hidden">
         <div
           aria-hidden
@@ -177,6 +177,5 @@ export function ComingSoon({ children }: ComingSoonProps) {
           {children}
         </div>
       </main>
-    </>
   );
 }
