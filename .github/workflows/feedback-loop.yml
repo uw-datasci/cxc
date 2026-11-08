@@ -5,11 +5,12 @@ name: Feedback Loop
 # - fix:     route:agent → Claude opens a PR; a route flip or a failed CI Quality Gate on a
 #            feedback/* PR is handled here too
 # - claude:  `@claude` on a feedback PR → Claude pushes the requested change and replies
+# - notify:  replies to the issue's Discord card: preview ready, live, on staging, needs info
 # Config: .github/feedback.yml. Docs: https://github.com/uw-datasci/nexus-workflows#feedback-loop
 #
 # Issue, comment and workflow_run events only run this file from the default branch (main).
-# Review events run the PR branch's copy, and feedback branches are cut from dev or main, so keep
-# it on both. All three share one file so their agent runs share one queue.
+# Review and deployment events run the PR branch's copy, and merges run the base branch's, and
+# feedback branches are cut from dev or main, so keep it on both. All three share one file so their agent runs share one queue.
 # The `if`s below only skip obviously unrelated events; each shared workflow checks again.
 
 on:
@@ -24,13 +25,19 @@ on:
   workflow_run:
     workflows: ["CI Quality Gate"]
     types: [completed]
+  deployment_status:
+  pull_request:
+    types: [closed]
 
 permissions: {}
 
 jobs:
   triage:
     name: Triage
-    if: github.event_name == 'issues' && github.event.action == 'labeled' && github.event.label.name == 'feedback'
+    # `retriage`: the bot adds it when an organizer answers or says a merged fix is still not right.
+    if: >-
+      github.event_name == 'issues' && github.event.action == 'labeled' &&
+      (github.event.label.name == 'feedback' || github.event.label.name == 'retriage')
     permissions:
       contents: read
       issues: read
@@ -84,6 +91,25 @@ jobs:
       pnpm-version: "12.8.1"   # same as quality-gate.yml
       lint-command: pnpm lint
       typecheck-command: pnpm typecheck
+    secrets:
+      INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
+      INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+
+  notify:
+    name: Notify
+    if: >-
+      (github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged && startsWith(github.event.pull_request.head.ref, 'feedback/')) ||
+      (github.event_name == 'issues' && github.event.action == 'labeled' && github.event.label.name == 'needs-info')
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+    uses: uw-datasci/nexus-workflows/.github/workflows/feedback-notify.yml@v4
+    with:
+      infisical-project-slug: uwdsc-54e-y
+      staging-url: https://cxc-git-dev-uwdsc.vercel.app
+      production-url: https://cxc.uwdatascience.ca
     secrets:
       INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
       INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
