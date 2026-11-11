@@ -1,0 +1,15 @@
+# Feedback loop config for cxc. Organizer feedback becomes issues labelled `feedback`, which triage
+# routes to Claude (`route:agent`) or a developer (`route:dev`). The workflows read this file from
+# `main`. What each field means: https://github.com/uw-datasci/nexus-workflows#feedback-loop
+app: cxc
+strictness: strict
+branches:
+  production: main
+  staging: dev
+lead: patel-aaryan
+dev_team: cxc-dev
+# devs: per-area owners, left out until ownership is clear.
+agent:
+  enabled: true
+  max_files: 5
+  never_touch: [migrations/**, lib/auth/**, proxy.ts, config/site.ts, .github/**, package.json, pnpm-lock.yaml]
