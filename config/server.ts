@@ -22,12 +22,6 @@ export const serverConfig = {
   databaseUrl: requireEnv("DATABASE_URL"),
   neonAuthBaseUrl: requireEnv("NEON_AUTH_BASE_URL"),
   neonAuthCookieSecret: requireEnv("NEON_AUTH_COOKIE_SECRET"),
-  raftAppName: requireEnv("RAFT_APP_NAME"),
-  raftDatabaseUrl: requireEnv("RAFT_DATABASE_URL"),
-  r2AccessKeyId: requireEnv("R2_ACCESS_KEY_ID"),
-  r2AccountId: requireEnv("R2_ACCOUNT_ID"),
-  r2BucketName: requireEnv("R2_BUCKET_NAME"),
-  r2SecretAccessKey: requireEnv("R2_SECRET_ACCESS_KEY"),
   resendApiKey: requireEnv("RESEND_API_KEY"),
   resendFromEmail: requireEnv("RESEND_FROM_EMAIL"),
 } as const;

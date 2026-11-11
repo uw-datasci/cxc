@@ -2,6 +2,7 @@ import "server-only";
 
 import { cache } from "react";
 import { notFound, redirect } from "next/navigation";
+import { connection } from "next/server";
 import { RaftResponse, withRaft } from "@uw-datasci/raft";
 
 import { siteConfig } from "@/config/site";
@@ -24,6 +25,8 @@ const VERIFY_EMAIL_PATH = "/verify-email";
  * Returns `null` when there is no session — callers decide what that means.
  */
 export const getAuthContext = cache(async (): Promise<AuthContext | null> => {
+  await connection();
+
   const { data: session } = await auth.getSession();
   const user = session?.user;
   if (!user) return null;
