@@ -21,8 +21,8 @@ export const auth = createNeonAuth({
   cookies: {
     secret: serverConfig.neonAuthCookieSecret,
     /**
-     * 60s rather than the 5-minute default. A role change or a ban should take
-     * effect within a minute, which matters during a live event; the cost is a
+     * 60s rather than the 5-minute default. A role change should take effect 
+     * within a minute, which matters during a live event; the cost is a
      * revalidation against the auth server at most once a minute per session.
      */
     sessionDataTtl: 60,
