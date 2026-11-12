@@ -13,3 +13,5 @@ agent:
   enabled: true
   max_files: 5
   never_touch: [migrations/**, lib/auth/**, proxy.ts, config/site.ts, .github/**, package.json, pnpm-lock.yaml]
+project:
+  number: 28
