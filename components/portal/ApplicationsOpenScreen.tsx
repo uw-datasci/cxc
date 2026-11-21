@@ -8,10 +8,6 @@ import { Button } from "@/components/ui/button";
 /**
  * "Applications now open" entry screen of the portal
  *
- * Desktop: full-width artwork with the logo, heading, and label on the right. The content is
- * anchored to the bottom like the artwork, so it stays clear of the terrain at any height.
- * Figma has no call to action or mobile frame here; "Start application" and the mobile
- * layout follow the welcome screen (1355:39633 / 1355:37159).
  */
 export function ApplicationsOpenScreen() {
   return (
