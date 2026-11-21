@@ -9,11 +9,6 @@ type PortalSidePanelProps = {
 };
 
 /**
- * Desktop graphics panel of the application portal: logos, rings, terrain, and markers.
- *
- * Positions are the Figma "Left panel" coordinates (CxC W27, node 1355:40865), 463 × 830.
- * The artwork is anchored to the bottom so the terrain always meets the bottom edge; on
- * viewports shorter than the Figma frame the top of the artwork is cropped instead.
  *
  * The welcome screens show a large CxC logo in the content column, so they hide the
  * panel's small wordmark with `wordmark={false}`.
