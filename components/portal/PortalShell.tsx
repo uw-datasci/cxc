@@ -13,24 +13,29 @@ import { cn } from "@/lib/utils";
  *
  * The right column is a full-height flex column, so a pinned {@link StepNav} at the end of
  * `children` sits at the bottom of short pages and stays on screen on long ones.
+ *
+ * Pass `wordmark={false}` on screens that show their own large CxC logo (the welcome
+ * screens); the side panel and mobile header then show only the DSC logo.
  */
 export function PortalShell({
   children,
+  wordmark = true,
   className,
 }: {
   children: ReactNode;
+  wordmark?: boolean;
   className?: string;
 }) {
   return (
     <div className="min-h-dvh bg-card text-foreground lg:flex">
-      <PortalSidePanel className="hidden lg:block" />
+      <PortalSidePanel wordmark={wordmark} className="hidden lg:block" />
       <div
         className={cn(
           "flex min-h-dvh min-w-0 flex-1 flex-col lg:border-l lg:border-border",
           className
         )}
       >
-        <PortalMobileHeader className="lg:hidden" />
+        <PortalMobileHeader wordmark={wordmark} className="lg:hidden" />
         {children}
       </div>
     </div>
@@ -38,7 +43,13 @@ export function PortalShell({
 }
 
 /** Mobile logo header (Figma "Frame 236"): DSC logo on the left, CxC wordmark centred. */
-function PortalMobileHeader({ className }: { className?: string }) {
+function PortalMobileHeader({
+  wordmark,
+  className,
+}: {
+  wordmark: boolean;
+  className?: string;
+}) {
   return (
     <header className={cn("relative h-[87px] shrink-0", className)}>
       <Image
@@ -48,13 +59,15 @@ function PortalMobileHeader({ className }: { className?: string }) {
         height={41}
         className="absolute top-6.25 left-6.25"
       />
-      <Image
-        src="/portal/cxc-wordmark.svg"
-        alt="CxC"
-        width={144}
-        height={41}
-        className="absolute top-[46px] left-1/2 h-[41px] w-[143.5px] -translate-x-1/2"
-      />
+      {wordmark && (
+        <Image
+          src="/portal/cxc-wordmark.svg"
+          alt="CxC"
+          width={144}
+          height={41}
+          className="absolute top-[46px] left-1/2 h-[41px] w-[143.5px] -translate-x-1/2"
+        />
+      )}
     </header>
   );
 }
