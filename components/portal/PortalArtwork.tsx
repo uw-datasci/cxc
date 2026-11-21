@@ -12,14 +12,6 @@ type PortalArtworkProps = {
   className?: string;
 };
 
-/**
- * Rings, terrain, and markers of the portal graphics (Figma CxC W27, "Left panel" 1355:40865
- * and "App main" 1355:39048), drawn on an 830px-tall stage anchored to the bottom of its
- * positioned parent so the terrain always meets the bottom edge.
- *
- * `panel` is the desktop side panel, which crops the terrain at its 463px width; `wide`
- * is the full-width "Applications now open" screen, where the terrain sits further left.
- */
 export function PortalArtwork({ variant = "panel", className }: PortalArtworkProps) {
   return (
     <div
