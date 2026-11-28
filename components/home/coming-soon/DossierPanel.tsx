@@ -1,4 +1,4 @@
-import { WaitlistModal } from "components/home/WaitlistModal";
+import { WaitlistModal } from "@/components/home/WaitlistModal";
 import { ScrambleText } from "@/components/home/ScrambleText";
 
 /**

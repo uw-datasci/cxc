@@ -17,16 +17,16 @@ export function SectionBar({
 }: SectionBarProps) {
   return (
     <div
-      aria-label={`${number} ${title}`}
+      aria-label={number ? `${number} ${title}` : title}
       className={cn(
-        "mx-6 flex h-18 max-w-7xl items-center justify-between overflow-hidden bg-primary px-10 text-background min-[1328px]:mx-auto sm:px-18",
+        "mx-6 flex h-18 max-w-7xl items-center justify-between overflow-hidden bg-primary px-5 text-background min-[1328px]:mx-auto sm:px-18",
         className
       )}
     >
       {number && (
         <span
           className={cn(
-            "shrink-0 text-[7rem] leading-none font-bold uppercase",
+            "shrink-0 text-6xl leading-none font-bold uppercase sm:text-[7rem]",
             titleFirst ? "order-2" : "order-1"
           )}
         >
@@ -36,7 +36,7 @@ export function SectionBar({
 
       <span
         className={cn(
-          "text min-w-0 truncate text-header-main font-bold uppercase",
+          "min-w-0 truncate text-header-tiny font-bold uppercase sm:text-header-main",
           titleFirst ? "order-1 text-left" : "order-2 text-right",
           titleClassName
         )}
